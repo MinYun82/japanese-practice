@@ -893,7 +893,7 @@ var App = (function () {
 
     if (todayPlan) {
       todayDayLabel.textContent = '第 ' + weekConfig.week + ' 週 · 第 ' + todayPlan.day + ' 天';
-      todayLabel.textContent = todayPlan.label;
+      todayLabel.textContent = todayPlan.title || todayPlan.label || '今日練習';
       todayDesc.textContent = todayPlan.description || '點下面的按鈕開始';
     } else {
       todayDayLabel.textContent = '今天的練習';
@@ -915,7 +915,7 @@ var App = (function () {
       html += '<div class="' + cls + '" onclick="App.startDayPlan(' + d.day + ')">';
       html += '<div class="day-num">' + d.day + '</div>';
       html += '<div class="day-info">';
-      html += '<div class="day-label">' + esc(d.label) + '</div>';
+      html += '<div class="day-label">' + esc(d.label || d.title || '') + '</div>';
       html += '<div class="day-desc">' + esc(d.description || '') + '</div>';
       html += '</div>';
 
@@ -974,11 +974,17 @@ var App = (function () {
       if (c.examples) {
         for (var j = 0; j < c.examples.length; j++) {
           var ex = c.examples[j];
-          html += '<div class="example-row" onclick="Speech.speak(\'' + escAttr(ex.char) + '\')">';
-          html += '<div class="jp-char-small">' + esc(ex.char) + '</div>';
-          html += '<div class="example-info">' + esc(ex.reading) + '<br>' + esc(ex.meaning) + '</div>';
-          html += '<button class="btn btn-icon btn-outline btn-sm" style="margin-left:auto">🔊</button>';
-          html += '</div>';
+          if (typeof ex === 'string') {
+            html += '<div class="example-row" style="padding:0.5rem 0">';
+            html += '<div class="example-info" style="font-size:0.95rem">' + esc(ex) + '</div>';
+            html += '</div>';
+          } else {
+            html += '<div class="example-row" onclick="Speech.speak(\'' + escAttr(ex.char) + '\')">';
+            html += '<div class="jp-char-small">' + esc(ex.char) + '</div>';
+            html += '<div class="example-info">' + esc(ex.reading) + '<br>' + esc(ex.meaning) + '</div>';
+            html += '<button class="btn btn-icon btn-outline btn-sm" style="margin-left:auto">🔊</button>';
+            html += '</div>';
+          }
         }
       }
       html += '</div>';
@@ -1015,6 +1021,7 @@ var App = (function () {
     html += '<div class="compare-card" onclick="Speech.speak(\'' + escAttr(c.itemA.char) + '\')">';
     html += '<div class="jp-char">' + esc(c.itemA.char) + '</div>';
     html += '<div class="reading">' + esc(c.itemA.reading) + '</div>';
+    if (c.itemA.zhuyinHint) html += '<div style="color:var(--primary);font-size:0.9rem">' + esc(c.itemA.zhuyinHint) + '</div>';
     if (c.itemA.meaning) html += '<div class="meaning">' + esc(c.itemA.meaning) + '</div>';
     html += '<div style="margin-top:0.5rem"><button class="btn btn-icon btn-outline btn-sm">🔊</button></div>';
     html += '</div>';
@@ -1024,6 +1031,7 @@ var App = (function () {
     html += '<div class="compare-card" onclick="Speech.speak(\'' + escAttr(c.itemB.char) + '\')">';
     html += '<div class="jp-char">' + esc(c.itemB.char) + '</div>';
     html += '<div class="reading">' + esc(c.itemB.reading) + '</div>';
+    if (c.itemB.zhuyinHint) html += '<div style="color:var(--primary);font-size:0.9rem">' + esc(c.itemB.zhuyinHint) + '</div>';
     if (c.itemB.meaning) html += '<div class="meaning">' + esc(c.itemB.meaning) + '</div>';
     html += '<div style="margin-top:0.5rem"><button class="btn btn-icon btn-outline btn-sm">🔊</button></div>';
     html += '</div>';
@@ -1074,6 +1082,12 @@ var App = (function () {
     html += '<div class="card-face card-back">';
     html += '<div class="jp-char">' + esc(card.front) + '</div>';
     html += '<div class="reading" style="font-size:1.3rem;margin-top:0.5rem">' + esc(card.back) + '</div>';
+    if (card.zhuyinHint) {
+      html += '<div style="font-size:1.1rem;color:var(--primary);margin-top:0.3rem">注音：' + esc(card.zhuyinHint) + '</div>';
+    }
+    if (card.chineseHint) {
+      html += '<div style="font-size:0.95rem;color:var(--text-light);margin-top:0.2rem">' + esc(card.chineseHint) + '</div>';
+    }
     html += '</div>';
     html += '</div>';
 
@@ -1237,7 +1251,7 @@ var App = (function () {
         if (item) {
           html += '<div class="improved-item">';
           html += '<span class="jp-char-small" style="font-size:1.2rem">' + esc(item.char) + '</span>';
-          html += '<span>' + esc(item.reading) + '</span>';
+          html += '<span>' + esc(item.reading) + (item.zhuyinHint ? ' (' + item.zhuyinHint + ')' : '') + '</span>';
           var m = Progress.getMastery(item.id);
           html += '<span style="margin-left:auto;font-size:0.75rem;color:var(--primary);">' + Progress.MASTERY_LABELS[m] + '</span>';
           html += '</div>';
@@ -1270,10 +1284,10 @@ var App = (function () {
 
   function executeDayPlan(plan) {
     var resolved = DailyPlanner.resolveItems(weekConfig, plan);
-    var mode = (plan.mode || '').split('+')[0]; // 取第一個模式
+    var mode = (plan.mode || 'flipcard').split('+')[0]; // 取第一個模式
 
     // 根據計畫的模式啟動對應練習
-    if (plan.showConcepts && mode === 'concepts') {
+    if (mode === 'concepts') {
       renderConcepts();
       showScreen('concepts');
     } else if (mode === 'compare') {

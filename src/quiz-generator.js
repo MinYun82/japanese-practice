@@ -253,12 +253,16 @@ var QuizGenerator = (function () {
           itemA: {
             char: target.char,
             reading: target.reading,
-            meaning: target.meaning || target.reading
+            meaning: target.meaning || target.reading,
+            chineseHint: target.chineseHint || '',
+            zhuyinHint: target.zhuyinHint || ''
           },
           itemB: {
             char: item.char,
             reading: item.reading,
-            meaning: item.meaning || item.reading
+            meaning: item.meaning || item.reading,
+            chineseHint: item.chineseHint || '',
+            zhuyinHint: item.zhuyinHint || ''
           },
           hint: generateHint(target, item)
         });
@@ -293,7 +297,9 @@ var QuizGenerator = (function () {
           : item.reading,
         audioText: item.audioText || item.char,
         type: item.type || 'hiragana',
-        id: item.id || item.reading
+        id: item.id || item.reading,
+        chineseHint: item.chineseHint || '',
+        zhuyinHint: item.zhuyinHint || ''
       };
     });
 

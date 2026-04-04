@@ -69,8 +69,10 @@ var DailyPlanner = (function () {
     if (!todayPlan) return { newItems: [], reviewItems: [], allItems: [], masteredCount: 0 };
 
     var allNewItems = weekConfig.newItems || [];
-    var newIds = todayPlan.newItemIds || [];
-    var reviewIds = todayPlan.reviewItemIds || [];
+    var rawIds = todayPlan.items || todayPlan.newItemIds || [];
+    // Filter out concept IDs (they start with "concept-")
+    var newIds = rawIds.filter(function (id) { return id.indexOf('concept-') !== 0; });
+    var reviewIds = todayPlan.review || todayPlan.reviewItemIds || [];
 
     // 查找函式
     function findById(id) {
@@ -133,7 +135,8 @@ var DailyPlanner = (function () {
       var resolved = resolveItems(weekConfig, plan);
       return {
         day: plan.day,
-        label: plan.label,
+        label: plan.label || plan.title,
+        title: plan.title || plan.label,
         description: plan.description,
         mode: plan.mode,
         itemCount: resolved.allItems.length,
