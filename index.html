@@ -534,76 +534,75 @@ body {
 <!-- ===== 首頁 ===== -->
 <div id="screen-home" class="screen active">
   <div class="container">
-    <div class="header">
-      <h1>媽媽的日文練習</h1>
-      <div class="subtitle" id="weekTitle">載入中...</div>
-      <div id="weekSelector" class="week-selector" style="display:none;">
-        <button class="btn btn-sm btn-outline" onclick="App.switchWeek(-1)" id="weekPrev">← 上週</button>
-        <select id="weekDropdown" onchange="App.switchWeekTo(this.value)"></select>
-        <button class="btn btn-sm btn-outline" onclick="App.switchWeek(1)" id="weekNext">下週 →</button>
-      </div>
-      <div id="speechBadge" class="speech-badge off">語音載入中</div>
+
+    <!-- ★ 最重要：今天要做什麼 — 媽媽只需要看這裡 ★ -->
+    <div style="text-align:center;padding:1.5rem 0 0.5rem;">
+      <div style="font-size:1.5rem;font-weight:700;">媽媽的日文練習</div>
+      <div style="font-size:0.8rem;color:var(--text-light);margin-top:0.2rem;" id="weekTitle"></div>
     </div>
 
-    <!-- 進度摘要 -->
-    <div class="stats-card fade-in">
-      <div class="stats-row">
-        <div class="stat-item">
-          <div class="stat-num" id="statMastered">0</div>
-          <div class="stat-label">已學會</div>
+    <div class="today-banner fade-in" onclick="App.startTodayPlan()" id="todayBanner" style="margin-bottom:0.8rem;">
+      <div style="font-size:0.75rem;opacity:0.8;" id="todayDayLabel">今天的練習</div>
+      <h3 id="todayLabel" style="font-size:1.3rem;margin:0.3rem 0;">載入中...</h3>
+      <p id="todayDesc" style="font-size:0.85rem;opacity:0.9;margin-bottom:0.8rem;"></p>
+      <div style="background:rgba(255,255,255,0.25);border-radius:8px;padding:0.6rem;text-align:center;font-size:1rem;font-weight:600;">
+        點這裡開始
+      </div>
+    </div>
+
+    <!-- 簡單的鼓勵語 + 進度 -->
+    <div style="text-align:center;margin-bottom:1rem;">
+      <div class="encouragement" id="encouragement" style="font-size:0.9rem;"></div>
+      <div style="display:flex;justify-content:center;gap:1.5rem;margin-top:0.5rem;">
+        <div style="text-align:center;">
+          <div style="font-size:1.5rem;font-weight:700;color:var(--primary);" id="statMastered">0</div>
+          <div style="font-size:0.65rem;color:var(--text-light);">已學會</div>
         </div>
-        <div class="stat-item">
-          <div class="stat-num" id="statToday">0</div>
-          <div class="stat-label">今天練了</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num" id="statStreak">0</div>
-          <div class="stat-label">連續天數</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num" id="statAccuracy">-</div>
-          <div class="stat-label">正確率</div>
+        <div style="text-align:center;">
+          <div style="font-size:1.5rem;font-weight:700;color:var(--success);" id="statStreak">0</div>
+          <div style="font-size:0.65rem;color:var(--text-light);">連續天數</div>
         </div>
       </div>
-      <div class="progress-bar">
+      <div class="progress-bar" style="margin-top:0.5rem;">
         <div class="progress-fill" id="progressFill" style="width:0%"></div>
       </div>
-      <div class="progress-text" id="progressText">載入中...</div>
-      <div class="encouragement" id="encouragement"></div>
+      <div class="progress-text" id="progressText"></div>
     </div>
 
-    <!-- 今日練習 Banner -->
-    <div class="today-banner fade-in" onclick="App.startTodayPlan()" id="todayBanner">
-      <h3 id="todayLabel">載入中...</h3>
-      <p id="todayDesc"></p>
-    </div>
-
-    <!-- 本週每日時間線 -->
+    <!-- 本週計畫（預設展開，簡潔） -->
     <div class="daily-timeline" id="dailyTimeline">
-      <h3>本週學習計畫</h3>
+      <h3>本週計畫</h3>
       <div id="timelineList"></div>
     </div>
 
-    <!-- 自由選擇模式（收合） -->
+    <!-- 其他功能收在這裡 -->
     <details style="margin-top:1rem;">
-      <summary style="font-size:0.8rem;color:var(--text-light);cursor:pointer;">自由選擇練習模式</summary>
-      <div class="mode-grid" style="margin-top:0.5rem;">
-        <div class="mode-btn" onclick="App.startMode('concepts')">
-          <span class="mode-icon">📖</span>
-          <span class="mode-label">觀念說明</span>
+      <summary style="font-size:0.75rem;color:var(--text-light);cursor:pointer;">更多選項</summary>
+      <div style="padding-top:0.5rem;">
+        <div id="weekSelector" class="week-selector" style="display:none;margin-bottom:0.8rem;">
+          <button class="btn btn-sm btn-outline" onclick="App.switchWeek(-1)" id="weekPrev">← 上週</button>
+          <select id="weekDropdown" onchange="App.switchWeekTo(this.value)"></select>
+          <button class="btn btn-sm btn-outline" onclick="App.switchWeek(1)" id="weekNext">下週 →</button>
         </div>
-        <div class="mode-btn" onclick="App.startMode('compare')">
-          <span class="mode-icon">🔀</span>
-          <span class="mode-label">對比練習</span>
+        <div class="mode-grid">
+          <div class="mode-btn" onclick="App.startMode('concepts')">
+            <span class="mode-icon">📖</span>
+            <span class="mode-label">觀念說明</span>
+          </div>
+          <div class="mode-btn" onclick="App.startMode('compare')">
+            <span class="mode-icon">🔀</span>
+            <span class="mode-label">對比練習</span>
+          </div>
+          <div class="mode-btn" onclick="App.startMode('flipcard')">
+            <span class="mode-icon">🃏</span>
+            <span class="mode-label">翻卡認識</span>
+          </div>
+          <div class="mode-btn" onclick="App.startMode('quiz')">
+            <span class="mode-icon">✏️</span>
+            <span class="mode-label">選擇題</span>
+          </div>
         </div>
-        <div class="mode-btn" onclick="App.startMode('flipcard')">
-          <span class="mode-icon">🃏</span>
-          <span class="mode-label">翻卡認識</span>
-        </div>
-        <div class="mode-btn" onclick="App.startMode('quiz')">
-          <span class="mode-icon">✏️</span>
-          <span class="mode-label">選擇題</span>
-        </div>
+        <div id="speechBadge" class="speech-badge off" style="margin-top:0.5rem;">語音載入中</div>
       </div>
     </details>
   </div>
@@ -863,23 +862,18 @@ var App = (function () {
 
     // 每日統計
     var ds = Progress.getDailyStats();
-    document.getElementById('statToday').textContent = ds.practiced;
     document.getElementById('statStreak').textContent = ds.streak;
 
-    // 正確率
-    var acc = ds.practiced > 0 ? Math.round(ds.correct / ds.practiced * 100) + '%' : '-';
-    document.getElementById('statAccuracy').textContent = acc;
-
-    // 鼓勵語
+    // 鼓勵語 — 簡單溫暖
     var enc = document.getElementById('encouragement');
     if (ds.practiced === 0) {
-      enc.textContent = '今天還沒練習，來練一下吧！';
-    } else if (ds.correct === ds.practiced) {
+      enc.textContent = '今天還沒練習，點上面的按鈕開始吧！';
+    } else if (ds.correct === ds.practiced && ds.practiced > 0) {
       enc.textContent = '太厲害了，全部答對！';
     } else if (ds.practiced >= 5) {
       enc.textContent = '今天很認真，繼續加油！';
     } else {
-      enc.textContent = '好的開始，再多練幾題吧！';
+      enc.textContent = '好的開始！再多練幾題吧！';
     }
 
     // 渲染今日 Banner 和每日時間線
@@ -895,12 +889,16 @@ var App = (function () {
     var todayLabel = document.getElementById('todayLabel');
     var todayDesc = document.getElementById('todayDesc');
 
+    var todayDayLabel = document.getElementById('todayDayLabel');
+
     if (todayPlan) {
-      todayLabel.textContent = '第 ' + todayPlan.day + ' 天 — ' + todayPlan.label;
-      todayDesc.textContent = todayPlan.description || '點我開始今天的練習';
+      todayDayLabel.textContent = '第 ' + weekConfig.week + ' 週 · 第 ' + todayPlan.day + ' 天';
+      todayLabel.textContent = todayPlan.label;
+      todayDesc.textContent = todayPlan.description || '點下面的按鈕開始';
     } else {
-      todayLabel.textContent = '今天的練習';
-      todayDesc.textContent = '點我開始';
+      todayDayLabel.textContent = '今天的練習';
+      todayLabel.textContent = '開始練習';
+      todayDesc.textContent = '點下面的按鈕開始';
     }
 
     // 週時間線
