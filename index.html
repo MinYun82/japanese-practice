@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>媽媽的日文練習</title>
+
+<!-- PWA：加到 iPhone 桌面 -->
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="日文練習">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#4A90D9">
+<style>
+/* ========== 設計系統 ========== */
+:root {
+  --bg: #FFF8F0;
+  --surface: #FFFFFF;
+  --text: #2D2D2D;
+  --text-light: #666666;
+  --primary: #4A90D9;
+  --primary-light: #E8F1FB;
+  --success: #4CAF50;
+  --success-light: #E8F5E9;
+  --warning: #FF9800;
+  --warning-light: #FFF3E0;
+  --error: #E53935;
+  --error-light: #FFEBEE;
+  --accent: #9C27B0;
+  --accent-light: #F3E5F5;
+  --border: #E0E0E0;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-lift: 0 4px 16px rgba(0,0,0,0.12);
+  --radius: 16px;
+  --font-jp: 'Noto Sans JP', 'Hiragino Sans', sans-serif;
+  --font-body: 'Noto Sans TC', 'PingFang TC', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 20px; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ========== 排版 — 老人友善 ========== */
+.jp-char { font-family: var(--font-jp); font-size: 3.2rem; font-weight: 700; }
+.jp-char-small { font-family: var(--font-jp); font-size: 2rem; }
+.reading { font-size: 1.1rem; color: var(--text-light); margin-top: 0.25rem; }
+.meaning { font-size: 1rem; color: var(--primary); }
+
+/* ========== 佈局 ========== */
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 1rem;
+  padding-bottom: 5rem;
+}
+
+/* ========== 頂部列 ========== */
+.header {
+  text-align: center;
+  padding: 1rem 0;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 1rem;
+}
+.header h1 { font-size: 1.4rem; }
+.header .subtitle { font-size: 0.85rem; color: var(--text-light); }
+.speech-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 99px;
+  background: var(--success-light);
+  color: var(--success);
+  margin-top: 0.25rem;
+}
+.speech-badge.off { background: var(--warning-light); color: var(--warning); }
+
+/* ========== 進度摘要卡 ========== */
+.stats-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.2rem;
+  margin-bottom: 1rem;
+}
+.stats-row {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+}
+.stat-item .stat-num {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+.stat-item .stat-label {
+  font-size: 0.7rem;
+  color: var(--text-light);
+}
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: var(--border);
+  border-radius: 6px;
+  margin-top: 0.8rem;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--success));
+  border-radius: 6px;
+  transition: width 0.6s ease;
+}
+.progress-text {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  text-align: center;
+  margin-top: 0.3rem;
+}
+.encouragement {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--success);
+  font-weight: 600;
+  margin-top: 0.5rem;
+  min-height: 1.4rem;
+}
+
+/* ========== 模式選擇按鈕 ========== */
+.mode-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+.mode-btn {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.2rem 0.8rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.mode-btn:active { transform: scale(0.97); }
+.mode-btn .mode-icon { font-size: 2rem; display: block; margin-bottom: 0.3rem; }
+.mode-btn .mode-label { font-size: 0.85rem; font-weight: 600; }
+.mode-btn .mode-desc { font-size: 0.65rem; color: var(--text-light); margin-top: 0.2rem; }
+.mode-btn.highlight { border-color: var(--primary); background: var(--primary-light); }
+
+/* ========== 概念說明畫面 ========== */
+.concept-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+.concept-card h2 { font-size: 1.2rem; margin-bottom: 0.8rem; color: var(--accent); }
+.concept-card p { font-size: 0.9rem; line-height: 1.8; margin-bottom: 0.8rem; }
+.example-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.6rem;
+  background: var(--accent-light);
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+.example-row .jp-char-small { flex-shrink: 0; }
+.example-info { font-size: 0.8rem; }
+
+/* ========== 翻卡 / 對比畫面 ========== */
+.card-container {
+  perspective: 800px;
+  margin: 1rem auto;
+}
+.flip-card {
+  width: 100%;
+  min-height: 220px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+  cursor: pointer;
+}
+.flip-card.flipped { transform: rotateY(180deg); }
+.flip-card .card-face {
+  position: absolute;
+  width: 100%;
+  min-height: 220px;
+  backface-visibility: hidden;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lift);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+.flip-card .card-back {
+  transform: rotateY(180deg);
+}
+.card-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  gap: 0.5rem;
+}
+.card-counter { font-size: 0.8rem; color: var(--text-light); }
+
+/* 對比卡 — 左右並排 */
+.compare-container {
+  display: flex;
+  gap: 0.8rem;
+  margin: 1rem 0;
+}
+.compare-card {
+  flex: 1;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+}
+.compare-card:active { box-shadow: var(--shadow-lift); }
+.compare-vs {
+  font-size: 1.2rem;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+}
+.compare-hint {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin-top: 0.5rem;
+  padding: 0.6rem;
+  background: var(--accent-light);
+  border-radius: 8px;
+}
+
+/* ========== 測驗畫面 ========== */
+.quiz-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.quiz-progress-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.quiz-progress-fill {
+  height: 100%;
+  background: var(--primary);
+  transition: width 0.3s;
+}
+.quiz-progress-text { font-size: 0.75rem; color: var(--text-light); white-space: nowrap; }
+
+.quiz-question {
+  text-align: center;
+  margin: 1.5rem 0;
+}
+.quiz-question .prompt { font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.5rem; }
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.quiz-option {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  font-size: 1.1rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  -webkit-tap-highlight-color: transparent;
+}
+.quiz-option:active { transform: scale(0.98); }
+.quiz-option .opt-char { font-family: var(--font-jp); font-size: 1.4rem; }
+.quiz-option.correct {
+  border-color: var(--success);
+  background: var(--success-light);
+}
+.quiz-option.wrong {
+  border-color: var(--error);
+  background: var(--error-light);
+}
+.quiz-option.disabled { pointer-events: none; opacity: 0.6; }
+
+/* ========== 結果畫面 ========== */
+.result-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lift);
+  padding: 2rem;
+  text-align: center;
+  margin: 1rem 0;
+}
+.result-score { font-size: 3rem; font-weight: 700; }
+.result-stars { font-size: 2rem; margin: 0.5rem 0; }
+.result-message { font-size: 1rem; margin: 0.5rem 0; }
+.result-detail {
+  text-align: left;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+}
+.result-detail .improved-item {
+  padding: 0.4rem 0.6rem;
+  background: var(--success-light);
+  border-radius: 8px;
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ========== 共用按鈕 ========== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 48px;
+  min-width: 48px;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--primary); color: white; }
+.btn-success { background: var(--success); color: white; }
+.btn-outline { background: transparent; border: 2px solid var(--border); color: var(--text); }
+.btn-icon {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 1.2rem;
+}
+.btn-block { display: flex; width: 100%; }
+.btn-sm { padding: 0.5rem 1rem; font-size: 0.85rem; min-height: 40px; }
+
+/* ========== 底部導航 ========== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem 0;
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  z-index: 100;
+}
+.nav-btn {
+  flex: 1;
+  max-width: 100px;
+  background: none;
+  border: none;
+  padding: 0.4rem;
+  text-align: center;
+  cursor: pointer;
+  color: var(--text-light);
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-btn.active { color: var(--primary); }
+.nav-btn .nav-icon { font-size: 1.3rem; display: block; }
+.nav-btn .nav-label { font-size: 0.55rem; }
+
+/* ========== 畫面切換 ========== */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ========== 動畫 ========== */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.fade-in { animation: fadeIn 0.3s ease; }
+@keyframes pop { 0% { transform: scale(0.8); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+.pop { animation: pop 0.4s ease; }
+
+/* ========== Toast ========== */
+.toast {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100px);
+  background: var(--text);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  z-index: 999;
+  transition: transform 0.3s ease;
+  white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ========== 載入畫面 ========== */
+.loading-screen {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+.loading-screen .spinner {
+  width: 40px; height: 40px;
+  border: 4px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 1rem;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ========== 週選擇 ========== */
+.week-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.week-selector select {
+  font-size: 1rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  background: var(--surface);
+}
+
+/* ========== 每日時間線 ========== */
+.daily-timeline {
+  margin: 1rem 0;
+}
+.daily-timeline h3 {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  margin-bottom: 0.6rem;
+}
+.day-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 0.8rem;
+  background: var(--surface);
+  border-radius: 12px;
+  margin-bottom: 0.5rem;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.day-item:active { transform: scale(0.98); }
+.day-item.today {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+.day-item.past { opacity: 0.6; }
+.day-item .day-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+.day-item.today .day-num { background: var(--primary); color: white; }
+.day-item.past .day-num { background: var(--success-light); color: var(--success); }
+.day-info { flex: 1; min-width: 0; }
+.day-info .day-label { font-size: 0.85rem; font-weight: 600; }
+.day-info .day-desc { font-size: 0.65rem; color: var(--text-light); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.day-item .day-badge {
+  font-size: 0.65rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 99px;
+  background: var(--success-light);
+  color: var(--success);
+  white-space: nowrap;
+}
+.today-banner {
+  background: linear-gradient(135deg, var(--primary), #6BB5F8);
+  color: white;
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.today-banner:active { transform: scale(0.98); }
+.today-banner h3 { font-size: 1rem; margin-bottom: 0.3rem; }
+.today-banner p { font-size: 0.8rem; opacity: 0.9; }
+
+/* Google Fonts 載入 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+TC:wght@400;600;700&display=swap');
+</style>
+</head>
+<body>
+
+<!-- ===== Toast ===== -->
+<div id="toast" class="toast"></div>
+
+<!-- ===== 首頁 ===== -->
+<div id="screen-home" class="screen active">
+  <div class="container">
+    <div class="header">
+      <h1>媽媽的日文練習</h1>
+      <div class="subtitle" id="weekTitle">載入中...</div>
+      <div id="weekSelector" class="week-selector" style="display:none;">
+        <button class="btn btn-sm btn-outline" onclick="App.switchWeek(-1)" id="weekPrev">← 上週</button>
+        <select id="weekDropdown" onchange="App.switchWeekTo(this.value)"></select>
+        <button class="btn btn-sm btn-outline" onclick="App.switchWeek(1)" id="weekNext">下週 →</button>
+      </div>
+      <div id="speechBadge" class="speech-badge off">語音載入中</div>
+    </div>
+
+    <!-- 進度摘要 -->
+    <div class="stats-card fade-in">
+      <div class="stats-row">
+        <div class="stat-item">
+          <div class="stat-num" id="statMastered">0</div>
+          <div class="stat-label">已學會</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="statToday">0</div>
+          <div class="stat-label">今天練了</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="statStreak">0</div>
+          <div class="stat-label">連續天數</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="statAccuracy">-</div>
+          <div class="stat-label">正確率</div>
+        </div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      </div>
+      <div class="progress-text" id="progressText">載入中...</div>
+      <div class="encouragement" id="encouragement"></div>
+    </div>
+
+    <!-- 今日練習 Banner -->
+    <div class="today-banner fade-in" onclick="App.startTodayPlan()" id="todayBanner">
+      <h3 id="todayLabel">載入中...</h3>
+      <p id="todayDesc"></p>
+    </div>
+
+    <!-- 本週每日時間線 -->
+    <div class="daily-timeline" id="dailyTimeline">
+      <h3>本週學習計畫</h3>
+      <div id="timelineList"></div>
+    </div>
+
+    <!-- 自由選擇模式（收合） -->
+    <details style="margin-top:1rem;">
+      <summary style="font-size:0.8rem;color:var(--text-light);cursor:pointer;">自由選擇練習模式</summary>
+      <div class="mode-grid" style="margin-top:0.5rem;">
+        <div class="mode-btn" onclick="App.startMode('concepts')">
+          <span class="mode-icon">📖</span>
+          <span class="mode-label">觀念說明</span>
+        </div>
+        <div class="mode-btn" onclick="App.startMode('compare')">
+          <span class="mode-icon">🔀</span>
+          <span class="mode-label">對比練習</span>
+        </div>
+        <div class="mode-btn" onclick="App.startMode('flipcard')">
+          <span class="mode-icon">🃏</span>
+          <span class="mode-label">翻卡認識</span>
+        </div>
+        <div class="mode-btn" onclick="App.startMode('quiz')">
+          <span class="mode-icon">✏️</span>
+          <span class="mode-label">選擇題</span>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ===== 概念說明畫面 ===== -->
+<div id="screen-concepts" class="screen">
+  <div class="container">
+    <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">
+      <button class="btn btn-icon btn-outline" onclick="App.goHome()">←</button>
+      <h2 style="font-size:1.1rem;">觀念說明</h2>
+    </div>
+    <div id="conceptsList"></div>
+    <button class="btn btn-primary btn-block" onclick="App.startMode('compare')" style="margin-top:1rem;">
+      接下來 → 對比練習
+    </button>
+  </div>
+</div>
+
+<!-- ===== 對比練習畫面 ===== -->
+<div id="screen-compare" class="screen">
+  <div class="container">
+    <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">
+      <button class="btn btn-icon btn-outline" onclick="App.goHome()">←</button>
+      <h2 style="font-size:1.1rem;">對比練習</h2>
+      <span class="card-counter" id="compareCounter"></span>
+    </div>
+    <div id="compareArea"></div>
+    <div class="card-nav">
+      <button class="btn btn-outline btn-sm" id="comparePrev" onclick="App.compareNav(-1)">上一組</button>
+      <button class="btn btn-primary btn-sm" id="compareNext" onclick="App.compareNav(1)">下一組</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 翻卡畫面 ===== -->
+<div id="screen-flipcard" class="screen">
+  <div class="container">
+    <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">
+      <button class="btn btn-icon btn-outline" onclick="App.goHome()">←</button>
+      <h2 style="font-size:1.1rem;">翻卡認識</h2>
+      <span class="card-counter" id="flipCounter"></span>
+    </div>
+    <div class="card-container" id="flipArea"></div>
+    <div style="display:flex;gap:0.5rem;margin-top:1rem;">
+      <button class="btn btn-outline" style="flex:1" id="flipNotYet" onclick="App.flipNext(false)">還不熟 😅</button>
+      <button class="btn btn-success" style="flex:1" id="flipGotIt" onclick="App.flipNext(true)">記住了 ✅</button>
+    </div>
+    <div class="card-nav">
+      <button class="btn btn-outline btn-sm" onclick="App.flipNav(-1)">上一張</button>
+      <button class="btn btn-primary btn-sm" onclick="App.flipNav(1)">下一張</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 測驗畫面 ===== -->
+<div id="screen-quiz" class="screen">
+  <div class="container">
+    <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
+      <button class="btn btn-icon btn-outline" onclick="App.goHome()">←</button>
+      <div class="quiz-progress" style="flex:1;">
+        <div class="quiz-progress-bar">
+          <div class="quiz-progress-fill" id="quizProgressFill"></div>
+        </div>
+        <span class="quiz-progress-text" id="quizProgressText"></span>
+      </div>
+    </div>
+    <div id="quizArea"></div>
+  </div>
+</div>
+
+<!-- ===== 結果畫面 ===== -->
+<div id="screen-results" class="screen">
+  <div class="container">
+    <div class="result-card fade-in" id="resultCard"></div>
+    <div style="display:flex;gap:0.5rem;margin-top:1rem;">
+      <button class="btn btn-outline" style="flex:1" onclick="App.goHome()">回首頁</button>
+      <button class="btn btn-primary" style="flex:1" onclick="App.startMode('quiz')">再練一次</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 載入週設定失敗 ===== -->
+<div id="screen-error" class="screen">
+  <div class="container">
+    <div class="loading-screen">
+      <h2>找不到週設定檔</h2>
+      <p style="font-size:0.85rem;color:var(--text-light);margin-top:0.5rem;">
+        請在 <code>weeks/</code> 資料夾放置週設定 JSON 檔案。
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 載入模組 ===== -->
+<!-- 所有週的學習設定（累積式，每週新增不覆蓋） -->
+<script src="weeks/all-weeks.js"></script>
+
+<!-- 核心模組 -->
+<script src="src/speech.js"></script>
+<script src="src/progress.js"></script>
+<script src="src/quiz-generator.js"></script>
+<script src="src/daily-planner.js"></script>
+
+<script>
+/**
+ * App — 主應用程式控制器
+ * 負責畫面切換、資料載入、UI 渲染
+ * 設計原則：KISS（簡單直接）、SRP（各 function 職責單一）
+ */
+var App = (function () {
+  'use strict';
+
+  // === 狀態 ===
+  var allWeeks = [];             // 所有週設定
+  var currentWeekIndex = 0;      // 目前顯示的週索引
+  var weekConfig = null;         // 當前週設定（= allWeeks[currentWeekIndex]）
+  var currentScreen = 'home';    // 當前畫面
+
+  // 翻卡狀態
+  var flipCards = [];
+  var flipIndex = 0;
+
+  // 對比狀態
+  var compareCards = [];
+  var compareIndex = 0;
+
+  // 測驗狀態
+  var quizQuestions = [];
+  var quizIndex = 0;
+  var quizCorrect = 0;
+  var quizAnswers = [];  // 記錄每題答對的 itemId
+
+  // ========== 畫面控制 ==========
+
+  function showScreen(id) {
+    var screens = document.querySelectorAll('.screen');
+    for (var i = 0; i < screens.length; i++) {
+      screens[i].classList.remove('active');
+    }
+    document.getElementById('screen-' + id).classList.add('active');
+    currentScreen = id;
+    window.scrollTo(0, 0);
+  }
+
+  function goHome() {
+    showScreen('home');
+    renderHome();
+  }
+
+  // ========== Toast ==========
+
+  function toast(msg) {
+    var el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(function () { el.classList.remove('show'); }, 2000);
+  }
+
+  // ========== 載入 ==========
+
+  function init() {
+    // 載入語音
+    Speech.init().then(function () {
+      var status = Speech.getStatus();
+      var badge = document.getElementById('speechBadge');
+      if (status.ready) {
+        badge.textContent = '🔊 ' + (status.voiceName || '語音就緒');
+        badge.classList.remove('off');
+      } else {
+        badge.textContent = '🔇 ' + (status.error || '語音未就緒');
+      }
+    });
+
+    // 載入週設定
+    loadWeekConfig();
+  }
+
+  function loadWeekConfig() {
+    // 支援兩種格式：ALL_WEEKS 陣列（累積式）或 WEEK_CONFIG 單週
+    if (typeof ALL_WEEKS !== 'undefined' && ALL_WEEKS.length > 0) {
+      allWeeks = ALL_WEEKS;
+      currentWeekIndex = allWeeks.length - 1; // 預設顯示最新週
+      weekConfig = allWeeks[currentWeekIndex];
+      renderWeekSelector();
+      renderHome();
+    } else if (typeof WEEK_CONFIG !== 'undefined') {
+      allWeeks = [WEEK_CONFIG];
+      currentWeekIndex = 0;
+      weekConfig = WEEK_CONFIG;
+      renderHome();
+    } else {
+      showScreen('error');
+    }
+  }
+
+  // ========== 週選擇器 ==========
+
+  function renderWeekSelector() {
+    if (allWeeks.length <= 1) return; // 只有一週不需要選擇器
+
+    var selector = document.getElementById('weekSelector');
+    var dropdown = document.getElementById('weekDropdown');
+    selector.style.display = 'flex';
+
+    var html = '';
+    for (var i = 0; i < allWeeks.length; i++) {
+      var w = allWeeks[i];
+      var selected = i === currentWeekIndex ? ' selected' : '';
+      html += '<option value="' + i + '"' + selected + '>';
+      html += '第 ' + w.week + ' 週';
+      html += '</option>';
+    }
+    dropdown.innerHTML = html;
+
+    // 更新前後按鈕狀態
+    document.getElementById('weekPrev').disabled = (currentWeekIndex === 0);
+    document.getElementById('weekNext').disabled = (currentWeekIndex === allWeeks.length - 1);
+  }
+
+  function switchWeek(dir) {
+    var newIdx = currentWeekIndex + dir;
+    if (newIdx < 0 || newIdx >= allWeeks.length) return;
+    switchWeekTo(newIdx);
+  }
+
+  function switchWeekTo(idx) {
+    idx = parseInt(idx, 10);
+    if (idx < 0 || idx >= allWeeks.length) return;
+    currentWeekIndex = idx;
+    weekConfig = allWeeks[currentWeekIndex];
+    renderWeekSelector();
+    renderHome();
+  }
+
+  // ========== 首頁渲染 ==========
+
+  function renderHome() {
+    if (!weekConfig) return;
+
+    // 標題
+    document.getElementById('weekTitle').textContent =
+      '第 ' + weekConfig.week + ' 週 — ' + weekConfig.title;
+
+    // 取得所有項目 ID
+    var allIds = weekConfig.newItems.map(function (it) { return it.id; });
+    if (weekConfig.reviewItems) {
+      allIds = allIds.concat(weekConfig.reviewItems);
+    }
+
+    // 進度
+    var wp = Progress.getWeeklyProgress({ items: allIds });
+    document.getElementById('statMastered').textContent = wp.mastered;
+    document.getElementById('progressFill').style.width = wp.percentage + '%';
+    document.getElementById('progressText').textContent =
+      '本週進度：' + wp.mastered + ' / ' + wp.total + ' (' + wp.percentage + '%)';
+
+    // 每日統計
+    var ds = Progress.getDailyStats();
+    document.getElementById('statToday').textContent = ds.practiced;
+    document.getElementById('statStreak').textContent = ds.streak;
+
+    // 正確率
+    var acc = ds.practiced > 0 ? Math.round(ds.correct / ds.practiced * 100) + '%' : '-';
+    document.getElementById('statAccuracy').textContent = acc;
+
+    // 鼓勵語
+    var enc = document.getElementById('encouragement');
+    if (ds.practiced === 0) {
+      enc.textContent = '今天還沒練習，來練一下吧！';
+    } else if (ds.correct === ds.practiced) {
+      enc.textContent = '太厲害了，全部答對！';
+    } else if (ds.practiced >= 5) {
+      enc.textContent = '今天很認真，繼續加油！';
+    } else {
+      enc.textContent = '好的開始，再多練幾題吧！';
+    }
+
+    // 渲染今日 Banner 和每日時間線
+    renderDailyTimeline();
+  }
+
+  // ========== 每日時間線 ==========
+
+  function renderDailyTimeline() {
+    // 今日 Banner
+    var todayPlan = DailyPlanner.getTodayPlan(weekConfig);
+    var todayBanner = document.getElementById('todayBanner');
+    var todayLabel = document.getElementById('todayLabel');
+    var todayDesc = document.getElementById('todayDesc');
+
+    if (todayPlan) {
+      todayLabel.textContent = '第 ' + todayPlan.day + ' 天 — ' + todayPlan.label;
+      todayDesc.textContent = todayPlan.description || '點我開始今天的練習';
+    } else {
+      todayLabel.textContent = '今天的練習';
+      todayDesc.textContent = '點我開始';
+    }
+
+    // 週時間線
+    var overview = DailyPlanner.getWeekOverview(weekConfig);
+    var listEl = document.getElementById('timelineList');
+    var html = '';
+
+    for (var i = 0; i < overview.length; i++) {
+      var d = overview[i];
+      var cls = 'day-item';
+      if (d.isToday) cls += ' today';
+      else if (d.isPast) cls += ' past';
+
+      html += '<div class="' + cls + '" onclick="App.startDayPlan(' + d.day + ')">';
+      html += '<div class="day-num">' + d.day + '</div>';
+      html += '<div class="day-info">';
+      html += '<div class="day-label">' + esc(d.label) + '</div>';
+      html += '<div class="day-desc">' + esc(d.description || '') + '</div>';
+      html += '</div>';
+
+      if (d.masteredCount > 0) {
+        html += '<div class="day-badge">' + d.masteredCount + '/' + d.itemCount + '</div>';
+      } else {
+        html += '<div class="day-badge" style="background:var(--border);color:var(--text-light);">' + d.itemCount + ' 項</div>';
+      }
+      html += '</div>';
+    }
+
+    listEl.innerHTML = html;
+  }
+
+  // ========== 模式啟動 ==========
+
+  function startMode(mode) {
+    if (!weekConfig) return;
+
+    switch (mode) {
+      case 'concepts':
+        renderConcepts();
+        showScreen('concepts');
+        break;
+      case 'compare':
+        initCompare();
+        showScreen('compare');
+        break;
+      case 'flipcard':
+        initFlipCards();
+        showScreen('flipcard');
+        break;
+      case 'quiz':
+        initQuiz();
+        showScreen('quiz');
+        break;
+      case 'daily':
+        initDailyPractice();
+        break;
+    }
+  }
+
+  // ========== 概念說明 ==========
+
+  function renderConcepts() {
+    var el = document.getElementById('conceptsList');
+    var html = '';
+    var concepts = weekConfig.concepts || [];
+
+    for (var i = 0; i < concepts.length; i++) {
+      var c = concepts[i];
+      html += '<div class="concept-card fade-in">';
+      html += '<h2>' + c.title + '</h2>';
+      html += '<p>' + c.explanation + '</p>';
+
+      if (c.examples) {
+        for (var j = 0; j < c.examples.length; j++) {
+          var ex = c.examples[j];
+          html += '<div class="example-row" onclick="Speech.speak(\'' + escAttr(ex.char) + '\')">';
+          html += '<div class="jp-char-small">' + esc(ex.char) + '</div>';
+          html += '<div class="example-info">' + esc(ex.reading) + '<br>' + esc(ex.meaning) + '</div>';
+          html += '<button class="btn btn-icon btn-outline btn-sm" style="margin-left:auto">🔊</button>';
+          html += '</div>';
+        }
+      }
+      html += '</div>';
+    }
+
+    if (concepts.length === 0) {
+      html = '<div class="concept-card"><p>這週沒有新概念說明</p></div>';
+    }
+
+    el.innerHTML = html;
+  }
+
+  // ========== 對比練習 ==========
+
+  function initCompare() {
+    compareCards = QuizGenerator.generateComparisonCards(weekConfig);
+    compareIndex = 0;
+
+    if (compareCards.length === 0) {
+      document.getElementById('compareArea').innerHTML =
+        '<div class="concept-card"><p>這週沒有對比項目</p></div>';
+      document.getElementById('compareCounter').textContent = '';
+      return;
+    }
+    renderCompare();
+  }
+
+  function renderCompare() {
+    var c = compareCards[compareIndex];
+    document.getElementById('compareCounter').textContent =
+      (compareIndex + 1) + ' / ' + compareCards.length;
+
+    var html = '<div class="compare-container fade-in">';
+    html += '<div class="compare-card" onclick="Speech.speak(\'' + escAttr(c.itemA.char) + '\')">';
+    html += '<div class="jp-char">' + esc(c.itemA.char) + '</div>';
+    html += '<div class="reading">' + esc(c.itemA.reading) + '</div>';
+    if (c.itemA.meaning) html += '<div class="meaning">' + esc(c.itemA.meaning) + '</div>';
+    html += '<div style="margin-top:0.5rem"><button class="btn btn-icon btn-outline btn-sm">🔊</button></div>';
+    html += '</div>';
+
+    html += '<div class="compare-vs">VS</div>';
+
+    html += '<div class="compare-card" onclick="Speech.speak(\'' + escAttr(c.itemB.char) + '\')">';
+    html += '<div class="jp-char">' + esc(c.itemB.char) + '</div>';
+    html += '<div class="reading">' + esc(c.itemB.reading) + '</div>';
+    if (c.itemB.meaning) html += '<div class="meaning">' + esc(c.itemB.meaning) + '</div>';
+    html += '<div style="margin-top:0.5rem"><button class="btn btn-icon btn-outline btn-sm">🔊</button></div>';
+    html += '</div>';
+    html += '</div>';
+
+    if (c.hint) {
+      html += '<div class="compare-hint">' + esc(c.hint) + '</div>';
+    }
+
+    document.getElementById('compareArea').innerHTML = html;
+  }
+
+  function compareNav(dir) {
+    compareIndex += dir;
+    if (compareIndex < 0) compareIndex = 0;
+    if (compareIndex >= compareCards.length) {
+      toast('對比練習完成！');
+      goHome();
+      return;
+    }
+    renderCompare();
+  }
+
+  // ========== 翻卡 ==========
+
+  function initFlipCards() {
+    flipCards = QuizGenerator.generateFlipCards(weekConfig, { limit: 15 });
+    flipIndex = 0;
+    renderFlipCard();
+  }
+
+  function renderFlipCard() {
+    if (flipIndex >= flipCards.length) {
+      toast('翻卡練習完成！');
+      goHome();
+      return;
+    }
+
+    var card = flipCards[flipIndex];
+    document.getElementById('flipCounter').textContent =
+      (flipIndex + 1) + ' / ' + flipCards.length;
+
+    var html = '<div class="flip-card" id="currentFlipCard" onclick="App.flipToggle()">';
+    html += '<div class="card-face card-front">';
+    html += '<div class="jp-char">' + esc(card.front) + '</div>';
+    html += '<button class="btn btn-icon btn-outline" onclick="event.stopPropagation(); Speech.speak(\'' + escAttr(card.audioText || card.front) + '\')" style="margin-top:1rem">🔊</button>';
+    html += '</div>';
+    html += '<div class="card-face card-back">';
+    html += '<div class="jp-char">' + esc(card.front) + '</div>';
+    html += '<div class="reading" style="font-size:1.3rem;margin-top:0.5rem">' + esc(card.back) + '</div>';
+    html += '</div>';
+    html += '</div>';
+
+    document.getElementById('flipArea').innerHTML = html;
+
+    // 自動播音
+    if (weekConfig.settings && weekConfig.settings.playAudioAutomatically) {
+      Speech.speak(card.audioText || card.front);
+    }
+  }
+
+  function flipToggle() {
+    var el = document.getElementById('currentFlipCard');
+    if (el) el.classList.toggle('flipped');
+  }
+
+  function flipNext(gotIt) {
+    var card = flipCards[flipIndex];
+    if (card && card.id) {
+      Progress.recordAnswer(card.id, gotIt);
+    }
+    if (gotIt) {
+      toast('記住了！');
+    }
+    flipIndex++;
+    renderFlipCard();
+  }
+
+  function flipNav(dir) {
+    flipIndex += dir;
+    if (flipIndex < 0) flipIndex = 0;
+    if (flipIndex >= flipCards.length) flipIndex = flipCards.length - 1;
+    renderFlipCard();
+  }
+
+  // ========== 測驗 ==========
+
+  function initQuiz(questions) {
+    quizQuestions = questions || QuizGenerator.generateQuiz(weekConfig, { count: 10 });
+    quizIndex = 0;
+    quizCorrect = 0;
+    quizAnswers = [];
+    renderQuizQuestion();
+    showScreen('quiz');
+  }
+
+  function renderQuizQuestion() {
+    if (quizIndex >= quizQuestions.length) {
+      showResults();
+      return;
+    }
+
+    var q = quizQuestions[quizIndex];
+    var pct = Math.round(quizIndex / quizQuestions.length * 100);
+    document.getElementById('quizProgressFill').style.width = pct + '%';
+    document.getElementById('quizProgressText').textContent =
+      (quizIndex + 1) + ' / ' + quizQuestions.length;
+
+    var html = '<div class="quiz-question fade-in">';
+    html += '<div class="prompt">' + esc(q.question) + '</div>';
+
+    if (q.questionAudio) {
+      html += '<button class="btn btn-icon btn-outline" onclick="Speech.speak(\'' + escAttr(q.questionAudio) + '\')" style="margin:0.5rem auto">🔊</button>';
+    }
+
+    // 如果題目是假名字，大字顯示
+    if (q.questionChar) {
+      html += '<div class="jp-char pop">' + esc(q.questionChar) + '</div>';
+    }
+    html += '</div>';
+
+    html += '<div class="quiz-options" id="quizOptions">';
+    for (var i = 0; i < q.options.length; i++) {
+      var opt = q.options[i];
+      html += '<div class="quiz-option" data-idx="' + i + '" data-correct="' + opt.isCorrect + '" onclick="App.answerQuiz(this, ' + i + ')">';
+      if (opt.char) {
+        html += '<span class="opt-char">' + esc(opt.char) + '</span>';
+      }
+      html += '<span>' + esc(opt.text) + '</span>';
+      html += '</div>';
+    }
+    html += '</div>';
+
+    document.getElementById('quizArea').innerHTML = html;
+
+    // 自動播音
+    if (q.questionAudio && weekConfig.settings && weekConfig.settings.playAudioAutomatically) {
+      Speech.speak(q.questionAudio);
+    }
+  }
+
+  function answerQuiz(el, idx) {
+    var q = quizQuestions[quizIndex];
+    var isCorrect = q.options[idx].isCorrect;
+
+    // 視覺反饋
+    el.classList.add(isCorrect ? 'correct' : 'wrong');
+
+    // 標記正確答案
+    var opts = document.querySelectorAll('#quizOptions .quiz-option');
+    for (var i = 0; i < opts.length; i++) {
+      opts[i].classList.add('disabled');
+      if (q.options[i].isCorrect) {
+        opts[i].classList.add('correct');
+      }
+    }
+
+    // 記錄
+    if (isCorrect) {
+      quizCorrect++;
+      toast('正確！🎉');
+    } else {
+      toast('再想想！正確答案已標示');
+    }
+
+    // 記錄到進度系統
+    if (q.itemId) {
+      Progress.recordAnswer(q.itemId, isCorrect);
+      if (isCorrect) quizAnswers.push(q.itemId);
+    }
+
+    // 延遲進入下一題
+    setTimeout(function () {
+      quizIndex++;
+      renderQuizQuestion();
+    }, 1200);
+  }
+
+  // ========== 結果 ==========
+
+  function showResults() {
+    showScreen('results');
+    var total = quizQuestions.length;
+    var pct = Math.round(quizCorrect / total * 100);
+    var stars = pct >= 90 ? 3 : (pct >= 60 ? 2 : (pct >= 40 ? 1 : 0));
+
+    var html = '<div class="result-score pop">' + pct + '%</div>';
+    html += '<div class="result-stars">' + '⭐'.repeat(stars) + '☆'.repeat(3 - stars) + '</div>';
+
+    // 鼓勵訊息
+    if (pct === 100) {
+      html += '<div class="result-message" style="color:var(--success)">完美！全部答對了！</div>';
+    } else if (pct >= 80) {
+      html += '<div class="result-message" style="color:var(--success)">好棒！越來越熟練了！</div>';
+    } else if (pct >= 50) {
+      html += '<div class="result-message">不錯喔，繼續練習會更好！</div>';
+    } else {
+      html += '<div class="result-message">沒關係，多練幾次就記住了！</div>';
+    }
+
+    html += '<div class="result-message" style="font-size:0.85rem;color:var(--text-light);">';
+    html += '答對 ' + quizCorrect + ' / ' + total + ' 題';
+    html += '</div>';
+
+    // 具體進步
+    if (quizAnswers.length > 0) {
+      html += '<div class="result-detail">';
+      html += '<p style="font-size:0.8rem;color:var(--text-light);margin-bottom:0.5rem;">這些字答對了：</p>';
+      for (var i = 0; i < quizAnswers.length; i++) {
+        var item = findItemById(quizAnswers[i]);
+        if (item) {
+          html += '<div class="improved-item">';
+          html += '<span class="jp-char-small" style="font-size:1.2rem">' + esc(item.char) + '</span>';
+          html += '<span>' + esc(item.reading) + '</span>';
+          var m = Progress.getMastery(item.id);
+          html += '<span style="margin-left:auto;font-size:0.75rem;color:var(--primary);">' + Progress.MASTERY_LABELS[m] + '</span>';
+          html += '</div>';
+        }
+      }
+      html += '</div>';
+    }
+
+    document.getElementById('resultCard').innerHTML = html;
+    document.getElementById('quizProgressFill').style.width = '100%';
+  }
+
+  // ========== 每日練習（根據 dailyPlan）==========
+
+  function startTodayPlan() {
+    var todayPlan = DailyPlanner.getTodayPlan(weekConfig);
+    if (todayPlan) {
+      executeDayPlan(todayPlan);
+    } else {
+      startMode('quiz'); // fallback
+    }
+  }
+
+  function startDayPlan(dayNum) {
+    var plan = DailyPlanner.getTodayPlan(weekConfig, { forceDay: dayNum });
+    if (plan) {
+      executeDayPlan(plan);
+    }
+  }
+
+  function executeDayPlan(plan) {
+    var resolved = DailyPlanner.resolveItems(weekConfig, plan);
+    var mode = (plan.mode || '').split('+')[0]; // 取第一個模式
+
+    // 根據計畫的模式啟動對應練習
+    if (plan.showConcepts && mode === 'concepts') {
+      renderConcepts();
+      showScreen('concepts');
+    } else if (mode === 'compare') {
+      initCompare();
+      showScreen('compare');
+    } else if (mode === 'flipcard') {
+      // 用計畫中指定的項目產生翻卡
+      var tempConfig = {
+        newItems: resolved.allItems,
+        reviewItems: [],
+        settings: weekConfig.settings
+      };
+      flipCards = QuizGenerator.generateFlipCards(tempConfig, { limit: 20 });
+      flipIndex = 0;
+      renderFlipCard();
+      showScreen('flipcard');
+    } else if (mode === 'quiz') {
+      // 用計畫中指定的項目出測驗
+      var tempConfig2 = {
+        newItems: resolved.allItems,
+        reviewItems: [],
+        settings: weekConfig.settings
+      };
+      var questions = QuizGenerator.generateQuiz(tempConfig2, {
+        count: Math.min(resolved.allItems.length, 10)
+      });
+      initQuiz(questions);
+    } else {
+      // 預設：根據項目數量決定模式
+      if (resolved.allItems.length <= 5) {
+        var tc = { newItems: resolved.allItems, reviewItems: [], settings: weekConfig.settings };
+        flipCards = QuizGenerator.generateFlipCards(tc, { limit: 10 });
+        flipIndex = 0;
+        renderFlipCard();
+        showScreen('flipcard');
+      } else {
+        startMode('quiz');
+      }
+    }
+  }
+
+  function initDailyPractice() {
+    startTodayPlan();
+  }
+
+  // ========== 工具 ==========
+
+  function findItemById(id) {
+    if (!weekConfig) return null;
+    for (var i = 0; i < weekConfig.newItems.length; i++) {
+      if (weekConfig.newItems[i].id === id) return weekConfig.newItems[i];
+    }
+    return null;
+  }
+
+  function esc(str) {
+    if (!str) return '';
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function escAttr(str) {
+    return esc(str).replace(/'/g, "\\'");
+  }
+
+  // ========== 公開 API ==========
+  return {
+    init: init,
+    goHome: goHome,
+    startMode: startMode,
+    startTodayPlan: startTodayPlan,
+    startDayPlan: startDayPlan,
+    switchWeek: switchWeek,
+    switchWeekTo: switchWeekTo,
+    flipToggle: flipToggle,
+    flipNext: flipNext,
+    flipNav: flipNav,
+    compareNav: compareNav,
+    answerQuiz: answerQuiz
+  };
+})();
+
+// 啟動
+document.addEventListener('DOMContentLoaded', App.init);
+</script>
+</body>
+</html>
