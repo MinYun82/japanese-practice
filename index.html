@@ -186,18 +186,15 @@ body {
   margin: 1rem auto;
 }
 .flip-card {
-  width: 100%;
+  display: grid;
   min-height: 240px;
-  position: relative;
   transform-style: preserve-3d;
   transition: transform 0.5s;
   cursor: pointer;
 }
 .flip-card.flipped { transform: rotateY(180deg); }
 .flip-card .card-face {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
+  grid-row: 1; grid-column: 1;
   min-height: 240px;
   backface-visibility: hidden;
   background: var(--surface);
@@ -651,11 +648,11 @@ body {
       <span class="card-counter" id="flipCounter"></span>
     </div>
     <div class="card-container" id="flipArea"></div>
-    <div style="display:flex;gap:0.5rem;margin-top:1rem;">
-      <button class="btn btn-outline" style="flex:1" id="flipNotYet" onclick="App.flipNext(false)">還不熟 😅</button>
-      <button class="btn btn-success" style="flex:1" id="flipGotIt" onclick="App.flipNext(true)">記住了 ✅</button>
+    <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+      <button class="btn btn-outline" style="flex:1;padding:0.9rem" id="flipNotYet" onclick="App.flipNext(false)">還不熟 😅</button>
+      <button class="btn btn-success" style="flex:1;padding:0.9rem" id="flipGotIt" onclick="App.flipNext(true)">記住了 ✅</button>
     </div>
-    <div class="card-nav">
+    <div style="display:flex;justify-content:space-between;margin-top:0.5rem;">
       <button class="btn btn-outline btn-sm" onclick="App.flipNav(-1)">上一張</button>
       <button class="btn btn-primary btn-sm" onclick="App.flipNav(1)">下一張</button>
     </div>
