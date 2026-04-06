@@ -285,10 +285,8 @@ var QuizGenerator = (function () {
    */
   function generateFlipCards(weekConfig, options) {
     var opts = Object.assign({ shuffle: true, limit: 10 }, options || {});
-    var allItems = getAllItems(weekConfig);
 
-    // 根據項目類型決定卡片正反面內容
-    var cards = allItems.map(function (item) {
+    function toCard(item, isReview) {
       var isVocab = item.type === 'vocab';
       return {
         front: item.char,
@@ -299,14 +297,26 @@ var QuizGenerator = (function () {
         type: item.type || 'hiragana',
         id: item.id || item.reading,
         chineseHint: item.chineseHint || '',
-        zhuyinHint: item.zhuyinHint || ''
+        zhuyinHint: item.zhuyinHint || '',
+        isReview: !!isReview
       };
-    });
-
-    // 洗牌（預設開啟）
-    if (opts.shuffle) {
-      cards = shuffle(cards);
     }
+
+    // 新項目
+    var newItems = (weekConfig.newItems || []).slice();
+    var newCards = newItems.map(function (item) { return toCard(item, false); });
+
+    // 複習項目：優先用 extraReviewItems（已解析的完整物件），否則從 weekConfig 解析
+    var reviewObjs = opts.extraReviewItems || resolveReviewItems(weekConfig);
+    var reviewCards = reviewObjs.map(function (item) { return toCard(item, true); });
+
+    // 各自洗牌，新的在前、複習在後（不混在一起）
+    if (opts.shuffle) {
+      newCards = shuffle(newCards);
+      reviewCards = shuffle(reviewCards);
+    }
+
+    var cards = newCards.concat(reviewCards);
 
     // 限制數量
     if (opts.limit && cards.length > opts.limit) {

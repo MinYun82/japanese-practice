@@ -187,7 +187,7 @@ body {
 }
 .flip-card {
   width: 100%;
-  min-height: 220px;
+  min-height: 240px;
   position: relative;
   transform-style: preserve-3d;
   transition: transform 0.5s;
@@ -196,8 +196,9 @@ body {
 .flip-card.flipped { transform: rotateY(180deg); }
 .flip-card .card-face {
   position: absolute;
+  top: 0; left: 0;
   width: 100%;
-  min-height: 220px;
+  min-height: 240px;
   backface-visibility: hidden;
   background: var(--surface);
   border-radius: var(--radius);
@@ -206,7 +207,8 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 1.5rem 2rem;
+  box-sizing: border-box;
 }
 .flip-card .card-back {
   transform: rotateY(180deg);
@@ -484,15 +486,17 @@ body {
 }
 .day-item.past { opacity: 0.6; }
 .day-item .day-num {
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background: var(--border);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.7rem;
+  line-height: 1.1;
   flex-shrink: 0;
 }
 .day-item.today .day-num { background: var(--primary); color: white; }
@@ -616,8 +620,8 @@ body {
       <h2 style="font-size:1.1rem;">觀念說明</h2>
     </div>
     <div id="conceptsList"></div>
-    <button class="btn btn-primary btn-block" onclick="App.startMode('compare')" style="margin-top:1rem;">
-      接下來 → 對比練習
+    <button id="conceptsNextBtn" class="btn btn-primary btn-block" onclick="App.continueAfterConcepts()" style="margin-top:1rem;">
+      接下來 → 開始練習
     </button>
   </div>
 </div>
@@ -721,6 +725,10 @@ var App = (function () {
   var currentWeekIndex = 0;      // 目前顯示的週索引
   var weekConfig = null;         // 當前週設定（= allWeeks[currentWeekIndex]）
   var currentScreen = 'home';    // 當前畫面
+
+  // 當前日計畫狀態（讓所有模式共用）
+  var currentDayPlan = null;
+  var currentResolved = null;
 
   // 翻卡狀態
   var flipCards = [];
@@ -906,17 +914,28 @@ var App = (function () {
     var listEl = document.getElementById('timelineList');
     var html = '';
 
+    // 模式對應 emoji
+    var modeEmoji = { 'concepts': '📖', 'flipcard': '🃏', 'compare': '🔀', 'quiz': '✏️' };
+
     for (var i = 0; i < overview.length; i++) {
       var d = overview[i];
       var cls = 'day-item';
       if (d.isToday) cls += ' today';
       else if (d.isPast) cls += ' past';
 
+      // 解析主模式 emoji
+      var mainMode = (d.mode || 'flipcard').split('+')[0];
+      var emoji = modeEmoji[mainMode] || '🃏';
+
       html += '<div class="' + cls + '" onclick="App.startDayPlan(' + d.day + ')">';
-      html += '<div class="day-num">' + d.day + '</div>';
+      html += '<div class="day-num">' + emoji + '<br>' + d.day + '</div>';
       html += '<div class="day-info">';
       html += '<div class="day-label">' + esc(d.label || d.title || '') + '</div>';
-      html += '<div class="day-desc">' + esc(d.description || '') + '</div>';
+      if (d.isToday) {
+        html += '<div class="day-desc" style="color:var(--primary);font-weight:600;">👈 今天練這個</div>';
+      } else {
+        html += '<div class="day-desc">' + esc(d.description || '') + '</div>';
+      }
       html += '</div>';
 
       if (d.masteredCount > 0) {
@@ -934,10 +953,14 @@ var App = (function () {
 
   function startMode(mode) {
     if (!weekConfig) return;
+    // 從模式按鈕直接啟動時，清除日計畫上下文（用整週資料）
+    currentDayPlan = null;
+    currentResolved = null;
 
     switch (mode) {
       case 'concepts':
         renderConcepts();
+        updateNextAfterConcepts('compare');
         showScreen('concepts');
         break;
       case 'compare':
@@ -960,10 +983,19 @@ var App = (function () {
 
   // ========== 概念說明 ==========
 
-  function renderConcepts() {
+  function renderConcepts(filterIds) {
     var el = document.getElementById('conceptsList');
     var html = '';
-    var concepts = weekConfig.concepts || [];
+    var allConcepts = weekConfig.concepts || [];
+    // 如果有指定概念 ID，只顯示那些；否則顯示全部
+    var concepts = allConcepts;
+    if (filterIds && filterIds.length > 0) {
+      concepts = allConcepts.filter(function(c) {
+        return filterIds.indexOf(c.id) !== -1;
+      });
+      // 如果 filter 後為空（ID 不匹配），fallback 到全部
+      if (concepts.length === 0) concepts = allConcepts;
+    }
 
     for (var i = 0; i < concepts.length; i++) {
       var c = concepts[i];
@@ -1000,16 +1032,20 @@ var App = (function () {
   // ========== 對比練習 ==========
 
   function initCompare() {
-    compareCards = QuizGenerator.generateComparisonCards(weekConfig);
-    compareIndex = 0;
-
-    if (compareCards.length === 0) {
-      document.getElementById('compareArea').innerHTML =
-        '<div class="concept-card"><p>這週沒有對比項目</p></div>';
-      document.getElementById('compareCounter').textContent = '';
-      return;
+    // 如果有日計畫的 resolved items，用那些；否則用整週
+    if (currentResolved && currentResolved.allItems.length > 0) {
+      initCompareWithItems(currentResolved.allItems);
+    } else {
+      compareCards = QuizGenerator.generateComparisonCards(weekConfig);
+      compareIndex = 0;
+      if (compareCards.length === 0) {
+        document.getElementById('compareArea').innerHTML =
+          '<div class="concept-card"><p>這週沒有對比項目</p></div>';
+        document.getElementById('compareCounter').textContent = '';
+        return;
+      }
+      renderCompare();
     }
-    renderCompare();
   }
 
   function renderCompare() {
@@ -1074,19 +1110,27 @@ var App = (function () {
     document.getElementById('flipCounter').textContent =
       (flipIndex + 1) + ' / ' + flipCards.length;
 
+    // 複習標記
+    var reviewBadge = card.isReview
+      ? '<div style="position:absolute;top:0.5rem;right:0.5rem;font-size:0.7rem;background:var(--border);color:var(--text-light);padding:0.15rem 0.5rem;border-radius:1rem;">複習</div>'
+      : '';
+
     var html = '<div class="flip-card" id="currentFlipCard" onclick="App.flipToggle()">';
     html += '<div class="card-face card-front">';
+    html += reviewBadge;
     html += '<div class="jp-char">' + esc(card.front) + '</div>';
-    html += '<button class="btn btn-icon btn-outline" onclick="event.stopPropagation(); Speech.speak(\'' + escAttr(card.audioText || card.front) + '\')" style="margin-top:1rem">🔊</button>';
+    html += '<button class="btn btn-icon btn-outline" onclick="event.stopPropagation(); Speech.speak(\'' + escAttr(card.audioText || card.front) + '\')" style="margin-top:0.8rem">🔊</button>';
+    html += '<div style="font-size:0.8rem;color:var(--text-light);margin-top:0.5rem">點卡片翻面看答案</div>';
     html += '</div>';
     html += '<div class="card-face card-back">';
+    html += reviewBadge;
     html += '<div class="jp-char">' + esc(card.front) + '</div>';
-    html += '<div class="reading" style="font-size:1.3rem;margin-top:0.5rem">' + esc(card.back) + '</div>';
+    html += '<div class="reading" style="font-size:1.3rem;margin-top:0.3rem">' + esc(card.back) + '</div>';
     if (card.zhuyinHint) {
-      html += '<div style="font-size:1.1rem;color:var(--primary);margin-top:0.3rem">注音：' + esc(card.zhuyinHint) + '</div>';
+      html += '<div style="font-size:1.1rem;color:var(--primary);margin-top:0.2rem">注音：' + esc(card.zhuyinHint) + '</div>';
     }
     if (card.chineseHint) {
-      html += '<div style="font-size:0.95rem;color:var(--text-light);margin-top:0.2rem">' + esc(card.chineseHint) + '</div>';
+      html += '<div style="font-size:0.9rem;color:var(--text-light);margin-top:0.15rem">' + esc(card.chineseHint) + '</div>';
     }
     html += '</div>';
     html += '</div>';
@@ -1283,50 +1327,115 @@ var App = (function () {
   }
 
   function executeDayPlan(plan) {
-    var resolved = DailyPlanner.resolveItems(weekConfig, plan);
-    var mode = (plan.mode || 'flipcard').split('+')[0]; // 取第一個模式
+    currentDayPlan = plan;
+    currentResolved = DailyPlanner.resolveItems(weekConfig, plan);
+    var modes = (plan.mode || 'flipcard').split('+');
+    var mode = modes[0];
 
     // 根據計畫的模式啟動對應練習
     if (mode === 'concepts') {
-      renderConcepts();
+      // 只渲染該天指定的概念卡
+      var conceptIds = (plan.items || []).filter(function(id) { return id.indexOf('concept-') === 0; });
+      renderConcepts(conceptIds);
+      // 更新「接下來」按鈕：跳到第二個模式
+      updateNextAfterConcepts(modes[1] || null);
       showScreen('concepts');
     } else if (mode === 'compare') {
-      initCompare();
+      initCompareWithItems(currentResolved.allItems);
       showScreen('compare');
     } else if (mode === 'flipcard') {
-      // 用計畫中指定的項目產生翻卡
-      var tempConfig = {
-        newItems: resolved.allItems,
-        reviewItems: [],
-        settings: weekConfig.settings
-      };
-      flipCards = QuizGenerator.generateFlipCards(tempConfig, { limit: 20 });
-      flipIndex = 0;
-      renderFlipCard();
-      showScreen('flipcard');
+      startFlipcardWithResolved(currentResolved);
     } else if (mode === 'quiz') {
-      // 用計畫中指定的項目出測驗
-      var tempConfig2 = {
-        newItems: resolved.allItems,
-        reviewItems: [],
-        settings: weekConfig.settings
-      };
-      var questions = QuizGenerator.generateQuiz(tempConfig2, {
-        count: Math.min(resolved.allItems.length, 10)
-      });
-      initQuiz(questions);
+      startQuizWithItems(currentResolved.allItems);
     } else {
       // 預設：根據項目數量決定模式
-      if (resolved.allItems.length <= 5) {
-        var tc = { newItems: resolved.allItems, reviewItems: [], settings: weekConfig.settings };
-        flipCards = QuizGenerator.generateFlipCards(tc, { limit: 10 });
-        flipIndex = 0;
-        renderFlipCard();
-        showScreen('flipcard');
+      if (currentResolved.allItems.length <= 5) {
+        startFlipcardWithResolved(currentResolved);
       } else {
-        startMode('quiz');
+        startQuizWithItems(currentResolved.allItems);
       }
     }
+  }
+
+  // 用指定項目啟動翻卡（新舊分開，新的在前）
+  function startFlipcardWithResolved(resolved) {
+    var newItems = resolved.newItems || resolved.allItems || [];
+    var reviewItems = resolved.reviewItems || [];
+    flipCards = QuizGenerator.generateFlipCards(
+      { newItems: newItems, reviewItems: [], settings: weekConfig.settings },
+      { limit: 20, extraReviewItems: reviewItems }
+    );
+    flipIndex = 0;
+    renderFlipCard();
+    showScreen('flipcard');
+  }
+
+  // 向後兼容：用 allItems 啟動（無分組）
+  function startFlipcardWithItems(items) {
+    startFlipcardWithResolved({ newItems: items, reviewItems: [], allItems: items });
+  }
+
+  // 用指定項目啟動測驗
+  function startQuizWithItems(items) {
+    var tempConfig = {
+      newItems: items,
+      reviewItems: [],
+      settings: weekConfig.settings
+    };
+    var questions = QuizGenerator.generateQuiz(tempConfig, {
+      count: Math.min(items.length, 10)
+    });
+    initQuiz(questions);
+  }
+
+  // 用指定項目啟動對比
+  function initCompareWithItems(items) {
+    var tempConfig = {
+      newItems: items,
+      reviewItems: [],
+      settings: weekConfig.settings
+    };
+    compareCards = QuizGenerator.generateComparisonCards(tempConfig);
+    compareIndex = 0;
+    if (compareCards.length === 0) {
+      document.getElementById('compareArea').innerHTML =
+        '<div class="concept-card"><p>這組沒有對比項目</p></div>';
+      document.getElementById('compareCounter').textContent = '';
+      return;
+    }
+    renderCompare();
+  }
+
+  // 概念說明結束後，跳到下一個模式
+  function continueAfterConcepts() {
+    if (!currentDayPlan || !currentResolved) {
+      goHome();
+      return;
+    }
+    var modes = (currentDayPlan.mode || 'flipcard').split('+');
+    var nextMode = modes[1] || 'flipcard';
+    if (nextMode === 'compare') {
+      initCompareWithItems(currentResolved.allItems);
+      showScreen('compare');
+    } else if (nextMode === 'flipcard') {
+      startFlipcardWithResolved(currentResolved);
+    } else if (nextMode === 'quiz') {
+      startQuizWithItems(currentResolved.allItems);
+    } else {
+      startFlipcardWithResolved(currentResolved);
+    }
+  }
+
+  // 更新「接下來」按鈕文字
+  function updateNextAfterConcepts(nextMode) {
+    var btn = document.getElementById('conceptsNextBtn');
+    if (!btn) return;
+    var labels = {
+      'flipcard': '接下來 → 翻卡認識',
+      'compare': '接下來 → 對比練習',
+      'quiz': '接下來 → 選擇題測驗'
+    };
+    btn.textContent = labels[nextMode] || '接下來 → 開始練習';
   }
 
   function initDailyPractice() {
@@ -1367,7 +1476,8 @@ var App = (function () {
     flipNext: flipNext,
     flipNav: flipNav,
     compareNav: compareNav,
-    answerQuiz: answerQuiz
+    answerQuiz: answerQuiz,
+    continueAfterConcepts: continueAfterConcepts
   };
 })();
 

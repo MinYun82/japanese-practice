@@ -18,9 +18,16 @@ var DailyPlanner = (function () {
    */
   function getDayNumber(classDate) {
     if (!classDate) return 1;
-    var classTime = new Date(classDate).getTime();
-    var now = new Date().getTime();
-    var diffDays = Math.floor((now - classTime) / (24 * 60 * 60 * 1000)) + 1;
+    // 用本地日期計算，避免時區偏移
+    var classParts = classDate.split('-');
+    var classLocal = new Date(
+      parseInt(classParts[0], 10),
+      parseInt(classParts[1], 10) - 1,
+      parseInt(classParts[2], 10)
+    );
+    var now = new Date();
+    var todayLocal = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var diffDays = Math.round((todayLocal - classLocal) / (24 * 60 * 60 * 1000)) + 1;
 
     // 限制在 1-7 範圍
     if (diffDays < 1) return 1;
@@ -74,15 +81,25 @@ var DailyPlanner = (function () {
     var newIds = rawIds.filter(function (id) { return id.indexOf('concept-') !== 0; });
     var reviewIds = todayPlan.review || todayPlan.reviewItemIds || [];
 
-    // 查找函式
+    // 查找函式 — 先查當週 newItems，再查所有週（跨週複習），最後查 KANA_POOL
     function findById(id) {
+      // 1. 當週 newItems
       for (var i = 0; i < allNewItems.length; i++) {
         if (allNewItems[i].id === id) return allNewItems[i];
       }
-      // 從 KANA_POOL 查找（複習上週的假名）
+      // 2. 所有週的 newItems（跨週複習時需要完整資料含 hints）
+      if (typeof ALL_WEEKS !== 'undefined') {
+        for (var w = 0; w < ALL_WEEKS.length; w++) {
+          var wItems = ALL_WEEKS[w].newItems || [];
+          for (var j = 0; j < wItems.length; j++) {
+            if (wItems[j].id === id) return wItems[j];
+          }
+        }
+      }
+      // 3. KANA_POOL fallback（沒有 chineseHint/zhuyinHint，但至少有基本資料）
       if (typeof QuizGenerator !== 'undefined' && QuizGenerator.KANA_POOL) {
-        for (var j = 0; j < QuizGenerator.KANA_POOL.length; j++) {
-          var k = QuizGenerator.KANA_POOL[j];
+        for (var p = 0; p < QuizGenerator.KANA_POOL.length; p++) {
+          var k = QuizGenerator.KANA_POOL[p];
           if (k.reading === id) return { id: id, char: k.char, reading: k.reading, type: k.type };
         }
       }
