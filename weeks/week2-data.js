@@ -1,6 +1,6 @@
 var WEEK2_DATA = {
   "week": 2,
-  "date": "2026-04-06",
+  "date": "2026-04-04",
   "title": "濁音·半濁音·促音 — 聲音的變化",
   "settings": {
     "dailyLimit": 20,
@@ -40,7 +40,7 @@ var WEEK2_DATA = {
       "audioText": "長音"
     }
   ],
-  "dakuon": [
+  "newItems": [
     {
       "id": "ga",
       "type": "dakuon",
@@ -220,9 +220,8 @@ var WEEK2_DATA = {
       "zhuyinHint": "ㄅㄛ",
       "compareWith": ["ho"],
       "audioText": "ぼ"
-    }
-  ],
-  "handakuon": [
+    },
+    // ===== 半濁音 =====
     {
       "id": "pa",
       "type": "handakuon",
@@ -272,9 +271,8 @@ var WEEK2_DATA = {
       "zhuyinHint": "ㄆㄛ",
       "compareWith": ["ho", "bo"],
       "audioText": "ぽ"
-    }
-  ],
-  "sokuon": [
+    },
+    // ===== 促音單字 =====
     {
       "id": "kitte",
       "type": "vocab",
@@ -366,7 +364,7 @@ var WEEK2_DATA = {
       "audioText": "コップ"
     },
     {
-      "id": "gakkou",
+      "id": "gakkou-sokuon",
       "type": "vocab",
       "char": "がっこう",
       "reading": "gakkou",
@@ -476,7 +474,7 @@ var WEEK2_DATA = {
       "day": 6,
       "title": "促音單字 後8個（コップ～いっしょうけんめい）+ 長音概念",
       "mode": "flipcard",
-      "items": ["concept-chouon", "koppu", "gakkou", "kekkou", "kekkon", "yukkuri", "isshoni", "isshuukan", "isshoukenmei"],
+      "items": ["concept-chouon", "koppu", "gakkou-sokuon", "kekkou", "kekkon", "yukkuri", "isshoni", "isshuukan", "isshoukenmei"],
       "review": ["kitte", "kippu", "nikki", "motto", "zasshi", "sekken", "ippai", "suppai"]
     },
     {
@@ -491,7 +489,7 @@ var WEEK2_DATA = {
         "pa", "pi", "pu", "pe", "po",
         "kitte", "kippu", "nikki", "motto",
         "zasshi", "sekken", "ippai", "suppai",
-        "koppu", "gakkou", "kekkou", "kekkon",
+        "koppu", "gakkou-sokuon", "kekkou", "kekkon",
         "yukkuri", "isshoni", "isshuukan", "isshoukenmei"
       ],
       "review": []
