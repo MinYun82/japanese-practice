@@ -219,6 +219,34 @@ var QuizGenerator = (function () {
     return pool.slice(0, count);
   }
 
+  /**
+   * 為「意思題」（單字／句型）挑選干擾選項——回傳其他項目的「中文意思」字串。
+   * 絕不混入假名讀音，避免出現「多少錢？ / gu / tsu / n」這種牛頭不對馬嘴的選項。
+   * @param {object} correct        - 正確項目（需有 meaning）
+   * @param {number} count          - 需要幾個干擾項
+   * @param {array}  candidatePools - 依優先序排列的候選來源陣列（每個元素是 item 陣列）
+   * @returns {array<string>} 干擾用的意思字串（最多 count 個；不足就回傳較少）
+   */
+  function pickMeaningDistractors(correct, count, candidatePools) {
+    var seen = {};
+    seen[correct.meaning || correct.reading] = true; // 排除正解本身
+    var result = [];
+
+    candidatePools.forEach(function (list) {
+      if (!list) return;
+      shuffle(list).forEach(function (it) {
+        if (result.length >= count) return;
+        var m = it.meaning;
+        if (!m || seen[m]) return;
+        if (it.id && correct.id && it.id === correct.id) return;
+        seen[m] = true;
+        result.push(m);
+      });
+    });
+
+    return result;
+  }
+
   // ========================================================================
   // 比較提示產生器 — 根據類型自動產生中文提示
   // ========================================================================
@@ -375,49 +403,50 @@ var QuizGenerator = (function () {
     // 洗牌後取所需數量
     var selected = shuffle(pool).slice(0, opts.count);
 
-    // 題目策略工廠：不同類型的項目用不同出題方式
-    var questionStrategies = {
-      // 假名題：看字選讀音
-      kana: function (item) {
-        return {
+    // 跨週的所有「有意思」項目（單字＋句型），當作意思題的干擾來源備援
+    var allMeaningItems = [];
+    if (typeof ALL_WEEKS !== 'undefined') {
+      ALL_WEEKS.forEach(function (w) {
+        (w.newItems || []).forEach(function (it) { if (it.meaning) allMeaningItems.push(it); });
+      });
+    }
+
+    var questions = selected.map(function (item) {
+      // 判斷依據改用「有沒有 meaning」：單字＋句型(grammar)都出意思題，只有純假名出讀音題
+      var hasMeaning = !!item.meaning;
+
+      var q, distractorTexts;
+      if (hasMeaning) {
+        q = {
+          question: '「' + item.char + '」是什麼意思？',
+          questionAudio: item.audioText || item.char,
+          correctText: item.meaning,
+          type: 'vocab-to-meaning'
+        };
+        // 干擾項：其他項目的「意思」（先同週題庫，再當週全部，最後跨週）
+        distractorTexts = pickMeaningDistractors(item, 3, [
+          pool, weekConfig.newItems || [], allMeaningItems
+        ]);
+      } else {
+        q = {
           question: '這個假名怎麼唸？ → ' + item.char,
           questionAudio: item.audioText || item.char,
           correctText: item.reading,
           type: 'kana-to-reading'
         };
-      },
-      // 單字題：看字選意思
-      vocab: function (item) {
-        return {
-          question: '「' + item.char + '」是什麼意思？',
-          questionAudio: item.audioText || item.char,
-          correctText: item.meaning || item.reading,
-          type: 'vocab-to-meaning'
-        };
+        // 干擾項：其他假名的讀音
+        distractorTexts = pickDistractors(item, 3).map(function (d) { return d.reading; });
       }
-    };
 
-    var questions = selected.map(function (item) {
-      var isVocab = item.type === 'vocab';
-      var strategy = isVocab ? questionStrategies.vocab : questionStrategies.kana;
-      var q = strategy(item);
-
-      // 產生 3 個干擾選項
-      var distractors = pickDistractors(item, 3);
-      var distractorTexts = distractors.map(function (d) {
-        // 假名題用 reading 當選項；單字題也用 reading（因為 pool 裡的假名沒有 meaning）
-        return isVocab ? (d.meaning || d.reading) : d.reading;
-      });
-
-      // 組合所有選項並洗牌
+      // 組合所有選項並洗牌（干擾項不足時就少幾個，不硬湊不相干的）
       var allOptions = [
         { text: q.correctText, isCorrect: true, id: item.id || item.reading }
       ];
-      distractors.forEach(function (d, idx) {
+      distractorTexts.forEach(function (text, idx) {
         allOptions.push({
-          text: distractorTexts[idx],
+          text: text,
           isCorrect: false,
-          id: d.reading + '-distractor-' + idx
+          id: (item.id || item.reading) + '-distractor-' + idx
         });
       });
       allOptions = shuffle(allOptions);
