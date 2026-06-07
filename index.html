@@ -5,6 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>媽媽的日文練習</title>
 
+<!-- 自動更新：每次開啟比對伺服器版本，有新版就自動重新載入（解決 iPhone 桌面 App 卡舊版）-->
+<script>
+(function () {
+  try {
+    var KEY = 'appVersion';
+    fetch('version.txt?ts=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (v) {
+        v = (v || '').trim();
+        if (!v) return;
+        var seen = localStorage.getItem(KEY);
+        if (seen === null) { localStorage.setItem(KEY, v); return; } // 首次只記錄、不重整
+        if (seen !== v) {
+          localStorage.setItem(KEY, v);
+          // 用新網址強制繞過 index.html 的舊快取
+          location.replace(location.pathname + '?v=' + encodeURIComponent(v));
+        }
+      })
+      .catch(function () {});
+  } catch (e) {}
+})();
+</script>
+
 <!-- PWA：加到 iPhone 桌面 -->
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
