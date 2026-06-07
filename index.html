@@ -721,14 +721,23 @@ body {
 </div>
 
 <!-- ===== 載入模組 ===== -->
-<!-- 所有週的學習設定（累積式，每週新增不覆蓋） -->
-<script src="weeks/all-weeks.js"></script>
-
-<!-- 核心模組 -->
-<script src="src/speech.js"></script>
-<script src="src/progress.js"></script>
-<script src="src/quiz-generator.js"></script>
-<script src="src/daily-planner.js"></script>
+<!-- 防快取：每次載入都帶上時間戳，確保媽媽手機永遠拿到最新版（本站需連網才能開，無離線需求） -->
+<script>
+(function () {
+  var v = Date.now();
+  var files = [
+    'weeks/all-weeks.js',   // 所有週的學習設定（累積式）
+    'src/speech.js',
+    'src/progress.js',
+    'src/quiz-generator.js',
+    'src/daily-planner.js'
+  ];
+  for (var i = 0; i < files.length; i++) {
+    // 依序同步寫入，確保載入順序與相依性正確
+    document.write('<scr' + 'ipt src="' + files[i] + '?v=' + v + '"></scr' + 'ipt>');
+  }
+})();
+</script>
 
 <script>
 /**
