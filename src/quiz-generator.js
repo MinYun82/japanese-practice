@@ -344,6 +344,7 @@ var QuizGenerator = (function () {
       var isVocab = item.type === 'vocab';
       return {
         front: item.char,
+        kanji: item.kanji || '',     // 有漢字時，正面以漢字為主、假名標在上方（振り仮名）
         back: isVocab
           ? item.reading + '（' + item.meaning + '）'
           : item.reading,
@@ -454,6 +455,7 @@ var QuizGenerator = (function () {
       return {
         question: q.question,
         questionChar: item.char,
+        questionKanji: item.kanji || '',
         questionAudio: q.questionAudio,
         options: allOptions,
         type: q.type,

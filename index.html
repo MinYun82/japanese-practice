@@ -53,6 +53,16 @@ body {
 /* ========== 排版 — 老人友善 ========== */
 .jp-char { font-family: var(--font-jp); font-size: 3.2rem; font-weight: 700; }
 .jp-char-small { font-family: var(--font-jp); font-size: 2rem; }
+
+/* 振り仮名（漢字上方的假名標音，像注音標注法）*/
+ruby { ruby-position: over; -webkit-ruby-position: before; }
+rt {
+  font-family: var(--font-jp);
+  font-size: 0.42em;        /* 相對漢字縮小，但仍清楚可讀 */
+  font-weight: 400;
+  color: var(--primary);
+  letter-spacing: 0.05em;
+}
 .reading { font-size: 1.1rem; color: var(--text-light); margin-top: 0.25rem; }
 .meaning { font-size: 1rem; color: var(--primary); }
 
@@ -1150,13 +1160,13 @@ var App = (function () {
     var html = '<div class="flip-card" id="currentFlipCard" onclick="App.flipToggle()">';
     html += '<div class="card-face card-front">';
     html += reviewBadge;
-    html += '<div class="jp-char">' + esc(card.front) + '</div>';
+    html += '<div class="jp-char">' + rubyHtml(card.front, card.kanji) + '</div>';
     html += '<button class="btn btn-icon btn-outline" onclick="event.stopPropagation(); Speech.speak(\'' + escAttr(card.audioText || card.front) + '\')" style="margin-top:0.8rem">🔊</button>';
     html += '<div style="font-size:0.8rem;color:var(--text-light);margin-top:0.5rem">點卡片翻面看答案</div>';
     html += '</div>';
     html += '<div class="card-face card-back">';
     html += reviewBadge;
-    html += '<div class="jp-char">' + esc(card.front) + '</div>';
+    html += '<div class="jp-char">' + rubyHtml(card.front, card.kanji) + '</div>';
     html += '<div class="reading" style="font-size:1.3rem;margin-top:0.3rem">' + esc(card.back) + '</div>';
     if (card.zhuyinHint) {
       html += '<div style="font-size:1.1rem;color:var(--primary);margin-top:0.2rem">注音：' + esc(card.zhuyinHint) + '</div>';
@@ -1308,9 +1318,9 @@ var App = (function () {
       html += '<button class="btn btn-icon btn-outline" onclick="Speech.speak(\'' + escAttr(q.questionAudio) + '\')" style="margin:0.5rem auto">🔊</button>';
     }
 
-    // 如果題目是假名字，大字顯示
+    // 如果題目是假名字，大字顯示（有漢字則漢字為主、假名標音）
     if (q.questionChar) {
-      html += '<div class="jp-char pop">' + esc(q.questionChar) + '</div>';
+      html += '<div class="jp-char pop">' + rubyHtml(q.questionChar, q.questionKanji) + '</div>';
     }
     html += '</div>';
 
@@ -1568,6 +1578,15 @@ var App = (function () {
     var div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
+  }
+
+  // 產生「漢字為主＋假名標音」的顯示 HTML（振り仮名）。
+  // 有 kanji 時：漢字當底、假名(kana)用 <rt> 標在上方；沒有就單純顯示假名。
+  function rubyHtml(kana, kanji) {
+    if (kanji) {
+      return '<ruby>' + esc(kanji) + '<rt>' + esc(kana) + '</rt></ruby>';
+    }
+    return esc(kana);
   }
 
   function escAttr(str) {
