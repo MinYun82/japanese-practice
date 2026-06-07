@@ -1160,13 +1160,13 @@ var App = (function () {
     var html = '<div class="flip-card" id="currentFlipCard" onclick="App.flipToggle()">';
     html += '<div class="card-face card-front">';
     html += reviewBadge;
-    html += '<div class="jp-char">' + rubyHtml(card.front, card.kanji) + '</div>';
+    html += '<div class="jp-char">' + rubyHtml(card.front, card.furigana) + '</div>';
     html += '<button class="btn btn-icon btn-outline" onclick="event.stopPropagation(); Speech.speak(\'' + escAttr(card.audioText || card.front) + '\')" style="margin-top:0.8rem">🔊</button>';
     html += '<div style="font-size:0.8rem;color:var(--text-light);margin-top:0.5rem">點卡片翻面看答案</div>';
     html += '</div>';
     html += '<div class="card-face card-back">';
     html += reviewBadge;
-    html += '<div class="jp-char">' + rubyHtml(card.front, card.kanji) + '</div>';
+    html += '<div class="jp-char">' + rubyHtml(card.front, card.furigana) + '</div>';
     html += '<div class="reading" style="font-size:1.3rem;margin-top:0.3rem">' + esc(card.back) + '</div>';
     if (card.zhuyinHint) {
       html += '<div style="font-size:1.1rem;color:var(--primary);margin-top:0.2rem">注音：' + esc(card.zhuyinHint) + '</div>';
@@ -1320,7 +1320,7 @@ var App = (function () {
 
     // 如果題目是假名字，大字顯示（有漢字則漢字為主、假名標音）
     if (q.questionChar) {
-      html += '<div class="jp-char pop">' + rubyHtml(q.questionChar, q.questionKanji) + '</div>';
+      html += '<div class="jp-char pop">' + rubyHtml(q.questionChar, q.questionFurigana) + '</div>';
     }
     html += '</div>';
 
@@ -1581,12 +1581,22 @@ var App = (function () {
   }
 
   // 產生「漢字為主＋假名標音」的顯示 HTML（振り仮名）。
-  // 有 kanji 時：漢字當底、假名(kana)用 <rt> 標在上方；沒有就單純顯示假名。
-  function rubyHtml(kana, kanji) {
-    if (kanji) {
-      return '<ruby>' + esc(kanji) + '<rt>' + esc(kana) + '</rt></ruby>';
+  // furigana 用標記法「漢字[よみ]」表示，只有漢字段落會加假名標音，
+  // 假名部分原樣顯示（不會出現假名上面又標假名的情況）。
+  // 沒有 furigana 時，單純顯示 kana。
+  function rubyHtml(kana, furigana) {
+    if (!furigana) return esc(kana);
+    var html = '';
+    // 底字只能是漢字（CJK），確保「漢字[讀音]」前面的假名不會被一起吃進 ruby
+    var re = /([一-鿿々〆ヶ]+)\[([^\[\]]+)\]/g;
+    var last = 0, m;
+    while ((m = re.exec(furigana)) !== null) {
+      if (m.index > last) html += esc(furigana.slice(last, m.index)); // 前面的純假名
+      html += '<ruby>' + esc(m[1]) + '<rt>' + esc(m[2]) + '</rt></ruby>';
+      last = re.lastIndex;
     }
-    return esc(kana);
+    if (last < furigana.length) html += esc(furigana.slice(last));     // 結尾的純假名
+    return html;
   }
 
   function escAttr(str) {
