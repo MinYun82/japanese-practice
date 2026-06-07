@@ -2675,5 +2675,497 @@ var ALL_WEEKS = [
       "review": []
     }
   ]
+},
+{
+  "week": 4,
+  "date": "2026-06-07",
+  "title": "自我介紹 — 打招呼·自介·介紹別人",
+  "settings": {
+    "dailyLimit": 20,
+    "fontSize": "large",
+    "showRomaji": true,
+    "playAudioAutomatically": true,
+    "reviewRatio": 0.3,
+    "classDay": "sunday"
+  },
+  "concepts": [
+    {
+      "id": "concept-greetings",
+      "type": "concept",
+      "title": "日本人怎麼打招呼？",
+      "explanation": "媽，日本人很重視打招呼。早上說「おはようございます」、白天見面說「こんにちは」、晚上見面說「こんばんは」、睡覺前才說「おやすみなさい」。對家人朋友可以講短一點：「おはよう」。記住：ございます／なさい 是比較有禮貌的尾巴，加上去就更客氣。",
+      "examples": [
+        "早上：おはようございます（喔哈優 勾紮衣媽思）",
+        "白天：こんにちは（口你七哇）",
+        "晚上見面：こんばんは（口嗯邦哇）／ 睡前：おやすみなさい"
+      ],
+      "audioText": "日本人怎麼打招呼"
+    },
+    {
+      "id": "concept-selfintro",
+      "type": "concept",
+      "title": "自我介紹的公式",
+      "explanation": "媽，自我介紹有個固定公式，套進去就好：先說「はじめまして」（初次見面），再說「わたしは ○○ です」（我是○○），可以加「たいわんから きました」（我來自台灣），最後一定要說「どうぞ よろしく おねがいします」（請多多指教）。這四句講完，就是完整的自我介紹了！",
+      "examples": [
+        "はじめまして。→ 初次見面，你好。",
+        "わたしは ちん です。→ 我姓陳。",
+        "たいわんから きました。どうぞ よろしく おねがいします。"
+      ],
+      "audioText": "自我介紹的公式"
+    },
+    {
+      "id": "concept-introduce",
+      "type": "concept",
+      "title": "幫別人介紹",
+      "explanation": "媽，要把朋友介紹給別人時，用「こちらは ○○さん です」（這位是○○）。「こちら」是「這位、這邊」的禮貌說法，「さん」是先生/小姐的意思，加在名字後面表示尊敬（不能加在自己名字後面喔）。介紹完，大家互相說「はじめまして」「よろしく おねがいします」就好。",
+      "examples": [
+        "こちらは たなかさん です。→ 這位是田中先生。",
+        "○○さん = ○○先生／小姐（稱呼別人才用）",
+        "介紹自己時不能說「わたしは ○○さん」"
+      ],
+      "audioText": "幫別人介紹"
+    }
+  ],
+  "newItems": [
+    {
+      "id": "ohayou-gozaimasu",
+      "type": "vocab",
+      "char": "おはようございます",
+      "reading": "ohayou gozaimasu",
+      "meaning": "早安（有禮貌）",
+      "chineseHint": "「喔哈優 勾紮衣媽思」→ 早安",
+      "zhuyinHint": "ㄛㄏㄚㄧㄡ ㄍㄛㄗㄞㄇㄚㄙ",
+      "audioText": "おはようございます"
+    },
+    {
+      "id": "ohayou",
+      "type": "vocab",
+      "char": "おはよう",
+      "reading": "ohayou",
+      "meaning": "早安（對家人朋友）",
+      "chineseHint": "「喔哈優」→ 早（輕鬆說法）",
+      "zhuyinHint": "ㄛㄏㄚㄧㄡ",
+      "audioText": "おはよう"
+    },
+    {
+      "id": "konnichiwa",
+      "type": "vocab",
+      "char": "こんにちは",
+      "reading": "konnichiwa",
+      "meaning": "你好／午安（白天）",
+      "chineseHint": "「口你七哇」→ 你好（注意は唸wa）",
+      "zhuyinHint": "ㄎㄛㄣㄋㄧㄑㄨㄚ",
+      "audioText": "こんにちは"
+    },
+    {
+      "id": "konbanwa",
+      "type": "vocab",
+      "char": "こんばんは",
+      "reading": "konbanwa",
+      "meaning": "晚上好（晚上見面）",
+      "chineseHint": "「口嗯邦哇」→ 晚安（見面時，は唸wa）",
+      "zhuyinHint": "ㄎㄛㄣㄅㄢㄨㄚ",
+      "audioText": "こんばんは"
+    },
+    {
+      "id": "oyasuminasai",
+      "type": "vocab",
+      "char": "おやすみなさい",
+      "reading": "oyasuminasai",
+      "meaning": "晚安（睡覺前）",
+      "chineseHint": "「喔呀思咪那賽」→ 睡前道晚安",
+      "zhuyinHint": "ㄛㄧㄚㄙㄇㄧㄋㄚㄙㄞ",
+      "audioText": "おやすみなさい"
+    },
+    {
+      "id": "sayounara",
+      "type": "vocab",
+      "char": "さようなら",
+      "reading": "sayounara",
+      "meaning": "再見",
+      "chineseHint": "「撒優那拉」→ 再見",
+      "zhuyinHint": "ㄙㄚㄧㄛㄨㄋㄚㄌㄚ",
+      "audioText": "さようなら"
+    },
+    {
+      "id": "arigatou-gozaimasu",
+      "type": "vocab",
+      "char": "ありがとうございます",
+      "reading": "arigatou gozaimasu",
+      "meaning": "謝謝（有禮貌）",
+      "chineseHint": "「阿哩嘎偷 勾紮衣媽思」→ 謝謝",
+      "zhuyinHint": "ㄚㄌㄧㄍㄚㄊㄡ ㄍㄛㄗㄞㄇㄚㄙ",
+      "audioText": "ありがとうございます"
+    },
+    {
+      "id": "sumimasen",
+      "type": "vocab",
+      "char": "すみません",
+      "reading": "sumimasen",
+      "meaning": "不好意思／對不起",
+      "chineseHint": "「思咪媽現」→ 不好意思、借過、謝謝",
+      "zhuyinHint": "ㄙㄇㄧㄇㄚㄙㄝㄣ",
+      "audioText": "すみません"
+    },
+    {
+      "id": "hajimemashite",
+      "type": "vocab",
+      "char": "はじめまして",
+      "reading": "hajimemashite",
+      "meaning": "初次見面（你好）",
+      "chineseHint": "「哈基妹媽西貼」→ 初次見面",
+      "zhuyinHint": "ㄏㄚㄐㄧㄇㄝㄇㄚㄒㄊㄝ",
+      "audioText": "はじめまして"
+    },
+    {
+      "id": "yoroshiku",
+      "type": "vocab",
+      "char": "よろしく おねがいします",
+      "reading": "yoroshiku onegaishimasu",
+      "meaning": "請多多指教",
+      "chineseHint": "「優摟西哭 喔內嘎衣西媽思」→ 請多指教",
+      "zhuyinHint": "ㄧㄛㄌㄛㄒㄎㄨ ㄛㄋㄝㄍㄞㄒㄇㄚㄙ",
+      "audioText": "よろしくおねがいします"
+    },
+    {
+      "id": "onegaishimasu",
+      "type": "vocab",
+      "char": "おねがいします",
+      "reading": "onegaishimasu",
+      "meaning": "麻煩您了／拜託了（請求時）",
+      "chineseHint": "「喔內嘎衣西媽思」→ 麻煩您、拜託了（點餐、請人幫忙時用）",
+      "zhuyinHint": "ㄛㄋㄝㄍㄞㄒㄇㄚㄙ",
+      "audioText": "おねがいします"
+    },
+    {
+      "id": "watashi-intro",
+      "type": "vocab",
+      "char": "わたし",
+      "reading": "watashi",
+      "meaning": "我",
+      "chineseHint": "「哇他西」→ 我",
+      "zhuyinHint": "ㄨㄚㄊㄚㄒ",
+      "audioText": "わたし"
+    },
+    {
+      "id": "onamae",
+      "type": "vocab",
+      "char": "おなまえ",
+      "reading": "onamae",
+      "meaning": "名字（您的大名）",
+      "chineseHint": "「喔那媽耶」→ 名字",
+      "zhuyinHint": "ㄛㄋㄚㄇㄚㄝ",
+      "audioText": "おなまえ"
+    },
+    {
+      "id": "san-suffix",
+      "type": "vocab",
+      "char": "～さん",
+      "reading": "san",
+      "meaning": "～先生／小姐（敬稱）",
+      "chineseHint": "「桑」→ 接在別人名字後面表示尊敬",
+      "zhuyinHint": "ㄙㄢ",
+      "audioText": "さん"
+    },
+    {
+      "id": "taiwan",
+      "type": "vocab",
+      "char": "たいわん",
+      "reading": "taiwan",
+      "meaning": "台灣",
+      "chineseHint": "「他衣哇嗯」→ 台灣",
+      "zhuyinHint": "ㄊㄞㄨㄢ",
+      "audioText": "たいわん"
+    },
+    {
+      "id": "taiwanjin",
+      "type": "vocab",
+      "char": "たいわんじん",
+      "reading": "taiwanjin",
+      "meaning": "台灣人",
+      "chineseHint": "「他衣哇嗯金」→ 台灣人（國名＋じん＝某國人）",
+      "zhuyinHint": "ㄊㄞㄨㄢㄐㄧㄣ",
+      "audioText": "たいわんじん"
+    },
+    {
+      "id": "nihonjin",
+      "type": "vocab",
+      "char": "にほんじん",
+      "reading": "nihonjin",
+      "meaning": "日本人",
+      "chineseHint": "「你紅金」→ 日本人",
+      "zhuyinHint": "ㄋㄧㄏㄛㄣㄐㄧㄣ",
+      "audioText": "にほんじん"
+    },
+    {
+      "id": "nihon",
+      "type": "vocab",
+      "char": "にほん",
+      "reading": "nihon",
+      "meaning": "日本",
+      "chineseHint": "「你紅」→ 日本",
+      "zhuyinHint": "ㄋㄧㄏㄛㄣ",
+      "audioText": "にほん"
+    },
+    {
+      "id": "amerika",
+      "type": "vocab",
+      "char": "アメリカ",
+      "reading": "amerika",
+      "meaning": "美國",
+      "chineseHint": "「阿妹哩卡」→ 美國（片假名）",
+      "zhuyinHint": "ㄚㄇㄝㄌㄧㄎㄚ",
+      "audioText": "アメリカ"
+    },
+    {
+      "id": "kankoku",
+      "type": "vocab",
+      "char": "かんこく",
+      "reading": "kankoku",
+      "meaning": "韓國",
+      "chineseHint": "「康口哭」→ 韓國",
+      "zhuyinHint": "ㄎㄢㄎㄛㄎㄨ",
+      "audioText": "かんこく"
+    },
+    {
+      "id": "igirisu",
+      "type": "vocab",
+      "char": "イギリス",
+      "reading": "igirisu",
+      "meaning": "英國",
+      "chineseHint": "「衣個哩思」→ 英國（片假名）",
+      "zhuyinHint": "ㄧㄍㄧㄌㄧㄙ",
+      "audioText": "イギリス"
+    },
+    {
+      "id": "furansu",
+      "type": "vocab",
+      "char": "フランス",
+      "reading": "furansu",
+      "meaning": "法國",
+      "chineseHint": "「夫拉嗯思」→ 法國（片假名）",
+      "zhuyinHint": "ㄈㄨㄌㄢㄙ",
+      "audioText": "フランス"
+    },
+    {
+      "id": "kochira",
+      "type": "vocab",
+      "char": "こちら",
+      "reading": "kochira",
+      "meaning": "這位／這邊（禮貌）",
+      "chineseHint": "「口七拉」→ 這位（介紹別人用）",
+      "zhuyinHint": "ㄎㄛㄑㄧㄌㄚ",
+      "audioText": "こちら"
+    },
+    {
+      "id": "intro-wa-desu",
+      "type": "grammar",
+      "char": "わたしは ～です",
+      "reading": "watashi wa ... desu",
+      "meaning": "我是～",
+      "chineseHint": "「哇他西哇 ～爹思」→ 我是～",
+      "zhuyinHint": "ㄨㄚㄊㄚㄒㄨㄚ …ㄉㄝㄙ",
+      "example": "わたしは ちん です。",
+      "exampleMeaning": "我姓陳。",
+      "audioText": "わたしは ちんです"
+    },
+    {
+      "id": "kara-kimashita",
+      "type": "grammar",
+      "char": "～から きました",
+      "reading": "... kara kimashita",
+      "meaning": "我來自～",
+      "chineseHint": "「～卡拉 ki媽西他」→ 從～來的",
+      "zhuyinHint": "…ㄎㄚㄌㄚ ㄎㄧㄇㄚㄒㄊㄚ",
+      "example": "たいわんから きました。",
+      "exampleMeaning": "我來自台灣。",
+      "audioText": "たいわんから きました"
+    },
+    {
+      "id": "douzo-yoroshiku",
+      "type": "grammar",
+      "char": "どうぞ よろしく おねがいします",
+      "reading": "douzo yoroshiku onegaishimasu",
+      "meaning": "請多多指教（完整禮貌版）",
+      "chineseHint": "「兜走 優摟西哭 喔內嘎衣西媽思」→ 請多多指教",
+      "zhuyinHint": "ㄉㄡㄗㄛ ㄧㄛㄌㄛㄒㄎㄨ ㄛㄋㄝㄍㄞㄒㄇㄚㄙ",
+      "example": "どうぞ よろしく おねがいします。",
+      "exampleMeaning": "請多多指教。",
+      "audioText": "どうぞよろしくおねがいします"
+    },
+    {
+      "id": "onamae-wa",
+      "type": "grammar",
+      "char": "おなまえは？",
+      "reading": "onamae wa?",
+      "meaning": "請問您的名字？",
+      "chineseHint": "「喔那媽耶哇？」→ 請問貴姓大名？",
+      "zhuyinHint": "ㄛㄋㄚㄇㄚㄝㄨㄚ",
+      "example": "おなまえは？",
+      "exampleMeaning": "您的名字是？",
+      "audioText": "おなまえは"
+    },
+    {
+      "id": "kochira-wa-san",
+      "type": "grammar",
+      "char": "こちらは ～さんです",
+      "reading": "kochira wa ... san desu",
+      "meaning": "這位是～",
+      "chineseHint": "「口七拉哇 ～桑爹思」→ 這位是～先生／小姐",
+      "zhuyinHint": "ㄎㄛㄑㄧㄌㄚㄨㄚ …ㄙㄢㄉㄝㄙ",
+      "example": "こちらは たなかさん です。",
+      "exampleMeaning": "這位是田中先生。",
+      "audioText": "こちらは たなかさんです"
+    }
+  ],
+  "reviewItems": [
+    "watashi",
+    "sensei",
+    "tomodachi"
+  ],
+  "dailyPlan": [
+    {
+      "day": 1,
+      "title": "打招呼（早安·你好·晚安）+ 概念",
+      "mode": "concepts+flipcard",
+      "items": [
+        "concept-greetings",
+        "ohayou-gozaimasu",
+        "ohayou",
+        "konnichiwa",
+        "konbanwa",
+        "oyasuminasai"
+      ],
+      "review": []
+    },
+    {
+      "day": 2,
+      "title": "禮貌用語（謝謝·對不起·再見·初次見面）",
+      "mode": "flipcard",
+      "items": [
+        "sayounara",
+        "arigatou-gozaimasu",
+        "sumimasen",
+        "hajimemashite",
+        "yoroshiku",
+        "onegaishimasu"
+      ],
+      "review": [
+        "ohayou-gozaimasu",
+        "konnichiwa",
+        "konbanwa",
+        "oyasuminasai"
+      ]
+    },
+    {
+      "day": 3,
+      "title": "招呼語小測驗（Day1-2）",
+      "mode": "quiz",
+      "items": [
+        "ohayou-gozaimasu",
+        "ohayou",
+        "konnichiwa",
+        "konbanwa",
+        "oyasuminasai",
+        "sayounara",
+        "arigatou-gozaimasu",
+        "sumimasen",
+        "hajimemashite",
+        "yoroshiku",
+        "onegaishimasu"
+      ],
+      "review": []
+    },
+    {
+      "day": 4,
+      "title": "國家名稱（日本·美國·台灣·韓國·英國·法國）+ 概念",
+      "mode": "concepts+flipcard",
+      "items": [
+        "concept-selfintro",
+        "nihon",
+        "amerika",
+        "taiwan",
+        "kankoku",
+        "igirisu",
+        "furansu"
+      ],
+      "review": [
+        "hajimemashite",
+        "yoroshiku"
+      ]
+    },
+    {
+      "day": 5,
+      "title": "自介單字·國籍·「我是～／來自～」句型",
+      "mode": "flipcard",
+      "items": [
+        "watashi-intro",
+        "onamae",
+        "san-suffix",
+        "taiwanjin",
+        "nihonjin",
+        "intro-wa-desu",
+        "kara-kimashita"
+      ],
+      "review": [
+        "nihon",
+        "amerika",
+        "taiwan"
+      ]
+    },
+    {
+      "day": 6,
+      "title": "請多指教·問名字·幫別人介紹 + 概念",
+      "mode": "concepts+flipcard",
+      "items": [
+        "concept-introduce",
+        "douzo-yoroshiku",
+        "onamae-wa",
+        "kochira",
+        "kochira-wa-san"
+      ],
+      "review": [
+        "san-suffix",
+        "intro-wa-desu",
+        "taiwanjin"
+      ]
+    },
+    {
+      "day": 7,
+      "title": "總複習測驗（全部自我介紹）",
+      "mode": "quiz",
+      "items": [
+        "ohayou-gozaimasu",
+        "ohayou",
+        "konnichiwa",
+        "konbanwa",
+        "oyasuminasai",
+        "sayounara",
+        "arigatou-gozaimasu",
+        "sumimasen",
+        "hajimemashite",
+        "yoroshiku",
+        "onegaishimasu",
+        "watashi-intro",
+        "onamae",
+        "san-suffix",
+        "taiwan",
+        "taiwanjin",
+        "nihonjin",
+        "nihon",
+        "amerika",
+        "kankoku",
+        "igirisu",
+        "furansu",
+        "kochira",
+        "intro-wa-desu",
+        "kara-kimashita",
+        "douzo-yoroshiku",
+        "onamae-wa",
+        "kochira-wa-san"
+      ],
+      "review": []
+    }
+  ]
 }
 ];

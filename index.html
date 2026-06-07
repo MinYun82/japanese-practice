@@ -551,6 +551,16 @@ body {
       </div>
     </div>
 
+    <!-- 假名閃卡遊戲 — 常駐入口，隨時可練發音 -->
+    <div onclick="App.startKanaGame()" style="background:var(--accent-light);border:2px solid var(--accent);border-radius:var(--radius);padding:0.9rem 1rem;margin-bottom:1rem;cursor:pointer;display:flex;align-items:center;gap:0.8rem;-webkit-tap-highlight-color:transparent;">
+      <span style="font-size:2rem;">🎴</span>
+      <div style="flex:1;">
+        <div style="font-size:1rem;font-weight:700;color:var(--accent);">假名閃卡遊戲</div>
+        <div style="font-size:0.75rem;color:var(--text-light);">隨機 10 題，看字先想發音，再點卡對答案</div>
+      </div>
+      <span style="font-size:1.2rem;color:var(--accent);">▶</span>
+    </div>
+
     <!-- 簡單的鼓勵語 + 進度 -->
     <div style="text-align:center;margin-bottom:1rem;">
       <div class="encouragement" id="encouragement" style="font-size:0.9rem;"></div>
@@ -659,6 +669,18 @@ body {
   </div>
 </div>
 
+<!-- ===== 假名抽卡遊戲畫面 ===== -->
+<div id="screen-kanagame" class="screen">
+  <div class="container">
+    <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">
+      <button class="btn btn-icon btn-outline" onclick="App.goHome()">←</button>
+      <h2 style="font-size:1.1rem;">假名閃卡</h2>
+      <span class="card-counter" id="kanaGameCounter"></span>
+    </div>
+    <div id="kanaGameArea"></div>
+  </div>
+</div>
+
 <!-- ===== 測驗畫面 ===== -->
 <div id="screen-quiz" class="screen">
   <div class="container">
@@ -734,6 +756,10 @@ var App = (function () {
   // 對比狀態
   var compareCards = [];
   var compareIndex = 0;
+
+  // 假名抽卡遊戲狀態（常駐，不綁週進度）
+  var kanaGameCards = [];
+  var kanaGameIndex = 0;
 
   // 測驗狀態
   var quizQuestions = [];
@@ -1164,6 +1190,85 @@ var App = (function () {
     renderFlipCard();
   }
 
+  // ========== 假名抽卡遊戲 ==========
+  // 每次隨機抽 10 張平/片假名，看字先想發音，點卡翻面對答案。
+  // 純練習，不記錄進度、不綁週計畫。
+
+  function startKanaGame() {
+    kanaGameCards = QuizGenerator.generateKanaGame({ count: 10 });
+    kanaGameIndex = 0;
+    renderKanaGameCard();
+    showScreen('kanagame');
+  }
+
+  function renderKanaGameCard() {
+    if (kanaGameIndex >= kanaGameCards.length) {
+      renderKanaGameDone();
+      return;
+    }
+
+    var card = kanaGameCards[kanaGameIndex];
+    document.getElementById('kanaGameCounter').textContent =
+      (kanaGameIndex + 1) + ' / ' + kanaGameCards.length;
+
+    var kanaLabel = card.kana === 'katakana' ? '片假名' : '平假名';
+
+    var html = '<div class="card-container">';
+    html += '<div class="flip-card" id="currentKanaCard" onclick="App.kanaGameFlip()">';
+    // 正面：只看字，自己先想發音
+    html += '<div class="card-face card-front">';
+    html += '<div style="position:absolute;top:0.5rem;right:0.5rem;font-size:0.7rem;background:var(--accent-light);color:var(--accent);padding:0.15rem 0.5rem;border-radius:1rem;">' + kanaLabel + '</div>';
+    html += '<div class="jp-char" style="font-size:5rem">' + esc(card.char) + '</div>';
+    html += '<div style="font-size:0.85rem;color:var(--text-light);margin-top:0.8rem">先想想怎麼唸……<br>想好了就點卡片對答案</div>';
+    html += '</div>';
+    // 背面：答案
+    html += '<div class="card-face card-back">';
+    html += '<div class="jp-char" style="font-size:4rem">' + esc(card.char) + '</div>';
+    html += '<div class="reading" style="font-size:1.6rem;margin-top:0.3rem;color:var(--primary);font-weight:700">' + esc(card.reading) + '</div>';
+    if (card.zhuyinHint) {
+      html += '<div style="font-size:1.1rem;color:var(--text-light);margin-top:0.2rem">注音：' + esc(card.zhuyinHint) + '</div>';
+    }
+    html += '<button class="btn btn-icon btn-outline" onclick="event.stopPropagation(); Speech.speak(\'' + escAttr(card.audioText || card.char) + '\')" style="margin-top:0.8rem">🔊</button>';
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+
+    // 下一張按鈕
+    html += '<button class="btn btn-primary btn-block" onclick="App.kanaGameNext()" style="margin-top:1rem;">下一張 →</button>';
+
+    document.getElementById('kanaGameArea').innerHTML = html;
+  }
+
+  function kanaGameFlip() {
+    var el = document.getElementById('currentKanaCard');
+    if (!el) return;
+    el.classList.toggle('flipped');
+    // 翻到答案面時，自動播放發音示範
+    if (el.classList.contains('flipped')) {
+      var card = kanaGameCards[kanaGameIndex];
+      if (card) Speech.speak(card.audioText || card.char);
+    }
+  }
+
+  function kanaGameNext() {
+    kanaGameIndex++;
+    renderKanaGameCard();
+  }
+
+  function renderKanaGameDone() {
+    document.getElementById('kanaGameCounter').textContent = '';
+    var html = '<div class="result-card fade-in">';
+    html += '<div style="font-size:3rem">🎉</div>';
+    html += '<div class="result-message" style="font-weight:700;font-size:1.2rem;margin-top:0.5rem">這 10 張練完了！</div>';
+    html += '<div class="result-message" style="font-size:0.9rem;color:var(--text-light)">想再練就再抽一輪，每次都不一樣喔</div>';
+    html += '</div>';
+    html += '<div style="display:flex;gap:0.5rem;margin-top:1rem;">';
+    html += '<button class="btn btn-outline" style="flex:1" onclick="App.goHome()">回首頁</button>';
+    html += '<button class="btn btn-primary" style="flex:1" onclick="App.startKanaGame()">再抽 10 張 🎴</button>';
+    html += '</div>';
+    document.getElementById('kanaGameArea').innerHTML = html;
+  }
+
   // ========== 測驗 ==========
 
   function initQuiz(questions) {
@@ -1472,6 +1577,9 @@ var App = (function () {
     flipToggle: flipToggle,
     flipNext: flipNext,
     flipNav: flipNav,
+    startKanaGame: startKanaGame,
+    kanaGameFlip: kanaGameFlip,
+    kanaGameNext: kanaGameNext,
     compareNav: compareNav,
     answerQuiz: answerQuiz,
     continueAfterConcepts: continueAfterConcepts
