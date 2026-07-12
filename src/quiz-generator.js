@@ -113,6 +113,36 @@ var QuizGenerator = (function () {
     _kanaByReading[k.reading] = k;
   });
 
+  // --- 拗音・片假名 擴充池（干擾選項用）---
+  // ⚠️ 必須在 _kanaByReading 建表「之後」才 push 進 KANA_POOL：
+  // 片假名的 reading（a, ka…）跟平假名相同，先建表可避免覆蓋平假名的 id 查找
+  var EXTRA_KANA = [
+    // 拗音
+    { char: 'きゃ', reading: 'kya', type: 'yoon' }, { char: 'きゅ', reading: 'kyu', type: 'yoon' }, { char: 'きょ', reading: 'kyo', type: 'yoon' },
+    { char: 'しゃ', reading: 'sha', type: 'yoon' }, { char: 'しゅ', reading: 'shu', type: 'yoon' }, { char: 'しょ', reading: 'sho', type: 'yoon' },
+    { char: 'ちゃ', reading: 'cha', type: 'yoon' }, { char: 'ちゅ', reading: 'chu', type: 'yoon' }, { char: 'ちょ', reading: 'cho', type: 'yoon' },
+    { char: 'にゃ', reading: 'nya', type: 'yoon' }, { char: 'にゅ', reading: 'nyu', type: 'yoon' }, { char: 'にょ', reading: 'nyo', type: 'yoon' },
+    { char: 'ひゃ', reading: 'hya', type: 'yoon' }, { char: 'ひゅ', reading: 'hyu', type: 'yoon' }, { char: 'ひょ', reading: 'hyo', type: 'yoon' },
+    { char: 'みゃ', reading: 'mya', type: 'yoon' }, { char: 'みゅ', reading: 'myu', type: 'yoon' }, { char: 'みょ', reading: 'myo', type: 'yoon' },
+    { char: 'りゃ', reading: 'rya', type: 'yoon' }, { char: 'りゅ', reading: 'ryu', type: 'yoon' }, { char: 'りょ', reading: 'ryo', type: 'yoon' },
+    { char: 'ぎゃ', reading: 'gya', type: 'yoon' }, { char: 'ぎゅ', reading: 'gyu', type: 'yoon' }, { char: 'ぎょ', reading: 'gyo', type: 'yoon' },
+    { char: 'じゃ', reading: 'ja', type: 'yoon' }, { char: 'じゅ', reading: 'ju', type: 'yoon' }, { char: 'じょ', reading: 'jo', type: 'yoon' },
+    { char: 'びゃ', reading: 'bya', type: 'yoon' }, { char: 'びゅ', reading: 'byu', type: 'yoon' }, { char: 'びょ', reading: 'byo', type: 'yoon' },
+    { char: 'ぴゃ', reading: 'pya', type: 'yoon' }, { char: 'ぴゅ', reading: 'pyu', type: 'yoon' }, { char: 'ぴょ', reading: 'pyo', type: 'yoon' },
+    // 片假名（清音，跳過幾乎用不到的 ヲ）
+    { char: 'ア', reading: 'a', type: 'katakana' }, { char: 'イ', reading: 'i', type: 'katakana' }, { char: 'ウ', reading: 'u', type: 'katakana' }, { char: 'エ', reading: 'e', type: 'katakana' }, { char: 'オ', reading: 'o', type: 'katakana' },
+    { char: 'カ', reading: 'ka', type: 'katakana' }, { char: 'キ', reading: 'ki', type: 'katakana' }, { char: 'ク', reading: 'ku', type: 'katakana' }, { char: 'ケ', reading: 'ke', type: 'katakana' }, { char: 'コ', reading: 'ko', type: 'katakana' },
+    { char: 'サ', reading: 'sa', type: 'katakana' }, { char: 'シ', reading: 'shi', type: 'katakana' }, { char: 'ス', reading: 'su', type: 'katakana' }, { char: 'セ', reading: 'se', type: 'katakana' }, { char: 'ソ', reading: 'so', type: 'katakana' },
+    { char: 'タ', reading: 'ta', type: 'katakana' }, { char: 'チ', reading: 'chi', type: 'katakana' }, { char: 'ツ', reading: 'tsu', type: 'katakana' }, { char: 'テ', reading: 'te', type: 'katakana' }, { char: 'ト', reading: 'to', type: 'katakana' },
+    { char: 'ナ', reading: 'na', type: 'katakana' }, { char: 'ニ', reading: 'ni', type: 'katakana' }, { char: 'ヌ', reading: 'nu', type: 'katakana' }, { char: 'ネ', reading: 'ne', type: 'katakana' }, { char: 'ノ', reading: 'no', type: 'katakana' },
+    { char: 'ハ', reading: 'ha', type: 'katakana' }, { char: 'ヒ', reading: 'hi', type: 'katakana' }, { char: 'フ', reading: 'fu', type: 'katakana' }, { char: 'ヘ', reading: 'he', type: 'katakana' }, { char: 'ホ', reading: 'ho', type: 'katakana' },
+    { char: 'マ', reading: 'ma', type: 'katakana' }, { char: 'ミ', reading: 'mi', type: 'katakana' }, { char: 'ム', reading: 'mu', type: 'katakana' }, { char: 'メ', reading: 'me', type: 'katakana' }, { char: 'モ', reading: 'mo', type: 'katakana' },
+    { char: 'ヤ', reading: 'ya', type: 'katakana' }, { char: 'ユ', reading: 'yu', type: 'katakana' }, { char: 'ヨ', reading: 'yo', type: 'katakana' },
+    { char: 'ラ', reading: 'ra', type: 'katakana' }, { char: 'リ', reading: 'ri', type: 'katakana' }, { char: 'ル', reading: 'ru', type: 'katakana' }, { char: 'レ', reading: 're', type: 'katakana' }, { char: 'ロ', reading: 'ro', type: 'katakana' },
+    { char: 'ワ', reading: 'wa', type: 'katakana' }, { char: 'ン', reading: 'n', type: 'katakana' }
+  ];
+  EXTRA_KANA.forEach(function (k) { KANA_POOL.push(k); });
+
   // ========================================================================
   // 假名閃卡遊戲池 — 平假名 + 片假名對照（看字猜發音用）
   // 每列：[平假名, 片假名, 羅馬拼音, 注音輔助]
