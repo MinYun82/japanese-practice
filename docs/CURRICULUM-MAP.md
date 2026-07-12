@@ -78,7 +78,10 @@
 4. 句型卡：`char` 用完整例句（假名＋空格），`furigana` 標漢字讀音，人名用みさお
 5. `chineseHint` 給發音諧音＋意思；`zhuyinHint` 給注音
 6. `compareWith` 只能指向**同一週**的 newItems（跨週配不到會被靜默跳過）
-7. dailyPlan 7 天、mode 只用 `concepts` / `flipcard` / `compare` / `quiz`（`+` 串接）
+7. dailyPlan 7 天、mode 只用 `concepts` / `flipcard` / `compare` / `quiz` / `listen`（`+` 串接）
+   - `listen`＝聽音選字（播聲音選出正確的字），適合放在 Day 5–7 加深
 8. 複習（`review`）帶前幾週的舊 id（findById 會跨週搜尋 ALL_WEEKS）
 9. id 全域唯一——先跑驗證腳本再交付（見 PITFALLS #21 條目附近說明）
-10. 改完 `date +%s > version.txt`，跟 all-weeks.js 一起 commit + push
+10. 每單元加一段 `dialogue`（title + lines[{speaker, jp, zh}]）：3–5 句、只用教過（或前幾週教過）的詞，
+    新詞要在 zh 裡括號註解；首頁會自動出現「本週對話」入口
+11. 改完 `date +%s > version.txt`，跟 all-weeks.js 一起 commit + push
