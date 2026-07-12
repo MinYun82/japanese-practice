@@ -3185,5 +3185,549 @@ var ALL_WEEKS = [
       "review": []
     }
   ]
+},
+{
+  "week": 5,
+  "date": "2026-07-13",
+  "title": "拗音・長音 — 平假名大功告成",
+  "settings": {
+    "dailyLimit": 20,
+    "fontSize": "large",
+    "showRomaji": true,
+    "playAudioAutomatically": true,
+    "reviewRatio": 0.3,
+    "classDay": "monday"
+  },
+  "concepts": [
+    {
+      "id": "concept-yoon",
+      "type": "concept",
+      "title": "拗音是什麼？",
+      "explanation": "媽，把「や・ゆ・よ」寫得小小的（ゃ・ゅ・ょ），貼在 き、し、ち 這些字的後面，兩個字合起來只唸「一拍」，像把音滑在一起：き＋小ゃ＝きゃ（kya，像「掐」）。記住：看到小小的ゃゅょ，就跟前面的字合起來唸，不要分開唸成兩個音。",
+      "examples": [
+        "きゃ＝き＋小ゃ →「kya」（きゃく＝客人）",
+        "しゃ＝し＋小ゃ →「sha」（しゃしん＝照片）",
+        "ちゃ＝ち＋小ゃ →「cha」（おちゃ＝茶，這個妳學過！）"
+      ],
+      "audioText": "拗音"
+    },
+    {
+      "id": "concept-yoon-dakuon",
+      "type": "concept",
+      "title": "濁音也有拗音",
+      "explanation": "媽，之前學的濁音（ぎ、じ、び、ぴ）一樣可以加小小的ゃゅょ：ぎゃ、じゃ、びゃ、ぴゃ。規則跟昨天學的一模一樣——合起來唸一拍。最常用的是「じゃ」，日本人說再見常說「じゃあね」（那麼，再見囉）。",
+      "examples": [
+        "じゃ →「ja」（じゃあね＝再見囉）",
+        "ぎゅ →「gyu」（ぎゅうにゅう＝牛奶）",
+        "びょ →「byo」（びょういん＝醫院）"
+      ],
+      "audioText": "濁音的拗音"
+    },
+    {
+      "id": "concept-chouon-family",
+      "type": "concept",
+      "title": "長音：拉長一拍，意思大不同",
+      "explanation": "媽，之前提過長音——把前面的音拉長一拍。今天用家人的稱呼來練：おばさん是「阿姨」，中間拉長變 おばあさん 就是「奶奶」！只差拉不拉長，意思完全不同，所以長音很重要。唸的時候心裡數：お・ば・あ・さ・ん，五拍。",
+      "examples": [
+        "おばさん（阿姨）↔ おばあさん（奶奶）",
+        "おじさん（叔叔）↔ おじいさん（爺爺）",
+        "おかあさん（媽媽）、おとうさん（爸爸）都有長音"
+      ],
+      "audioText": "長音"
+    }
+  ],
+  "newItems": [
+    { "id": "kya", "type": "yoon", "char": "きゃ", "reading": "kya", "chineseHint": "き＋小ゃ，像「掐」的音（きゃく＝客人）", "zhuyinHint": "ㄎㄧㄚ", "audioText": "きゃ" },
+    { "id": "kyu", "type": "yoon", "char": "きゅ", "reading": "kyu", "chineseHint": "き＋小ゅ，像「Q」的音（きゅう＝九）", "zhuyinHint": "ㄎㄧㄨ", "audioText": "きゅ" },
+    { "id": "kyo", "type": "yoon", "char": "きょ", "reading": "kyo", "chineseHint": "き＋小ょ（きょう＝今天）", "zhuyinHint": "ㄎㄧㄛ", "audioText": "きょ" },
+    { "id": "sha", "type": "yoon", "char": "しゃ", "reading": "sha", "chineseHint": "し＋小ゃ，像「蝦」的音（しゃしん＝照片）", "zhuyinHint": "ㄒㄧㄚ", "audioText": "しゃ" },
+    { "id": "shu", "type": "yoon", "char": "しゅ", "reading": "shu", "chineseHint": "し＋小ゅ，像「噓」的音（しゅふ＝主婦）", "zhuyinHint": "ㄒㄩ", "audioText": "しゅ" },
+    { "id": "sho", "type": "yoon", "char": "しょ", "reading": "sho", "chineseHint": "し＋小ょ（しょうゆ＝醬油）", "zhuyinHint": "ㄒㄧㄛ", "audioText": "しょ" },
+    { "id": "cha", "type": "yoon", "char": "ちゃ", "reading": "cha", "chineseHint": "ち＋小ゃ，像「掐」帶氣音（おちゃ＝茶）", "zhuyinHint": "ㄑㄧㄚ", "audioText": "ちゃ" },
+    { "id": "chu", "type": "yoon", "char": "ちゅ", "reading": "chu", "chineseHint": "ち＋小ゅ，像「啾」的音", "zhuyinHint": "ㄑㄩ", "audioText": "ちゅ" },
+    { "id": "cho", "type": "yoon", "char": "ちょ", "reading": "cho", "chineseHint": "ち＋小ょ（ちょっと＝稍微、等一下）", "zhuyinHint": "ㄑㄧㄛ", "audioText": "ちょ" },
+    { "id": "nya", "type": "yoon", "char": "にゃ", "reading": "nya", "chineseHint": "に＋小ゃ，像貓叫「喵」去掉ㄇ", "zhuyinHint": "ㄋㄧㄚ", "audioText": "にゃ" },
+    { "id": "nyu", "type": "yoon", "char": "にゅ", "reading": "nyu", "chineseHint": "に＋小ゅ（にゅういん＝住院）", "zhuyinHint": "ㄋㄧㄨ", "audioText": "にゅ" },
+    { "id": "nyo", "type": "yoon", "char": "にょ", "reading": "nyo", "chineseHint": "に＋小ょ", "zhuyinHint": "ㄋㄧㄛ", "audioText": "にょ" },
+    { "id": "hya", "type": "yoon", "char": "ひゃ", "reading": "hya", "chineseHint": "ひ＋小ゃ（ひゃく＝一百，妳學過！）", "zhuyinHint": "ㄏㄧㄚ", "audioText": "ひゃ" },
+    { "id": "hyu", "type": "yoon", "char": "ひゅ", "reading": "hyu", "chineseHint": "ひ＋小ゅ，像風聲「咻」", "zhuyinHint": "ㄏㄧㄨ", "audioText": "ひゅ" },
+    { "id": "hyo", "type": "yoon", "char": "ひょ", "reading": "hyo", "chineseHint": "ひ＋小ょ", "zhuyinHint": "ㄏㄧㄛ", "audioText": "ひょ" },
+    { "id": "mya", "type": "yoon", "char": "みゃ", "reading": "mya", "chineseHint": "み＋小ゃ，像「咩呀」合一拍", "zhuyinHint": "ㄇㄧㄚ", "audioText": "みゃ" },
+    { "id": "myu", "type": "yoon", "char": "みゅ", "reading": "myu", "chineseHint": "み＋小ゅ", "zhuyinHint": "ㄇㄧㄨ", "audioText": "みゅ" },
+    { "id": "myo", "type": "yoon", "char": "みょ", "reading": "myo", "chineseHint": "み＋小ょ（みょうじ＝姓氏）", "zhuyinHint": "ㄇㄧㄛ", "audioText": "みょ" },
+    { "id": "rya", "type": "yoon", "char": "りゃ", "reading": "rya", "chineseHint": "り＋小ゃ", "zhuyinHint": "ㄌㄧㄚ", "audioText": "りゃ" },
+    { "id": "ryu", "type": "yoon", "char": "りゅ", "reading": "ryu", "chineseHint": "り＋小ゅ（りゅう＝龍）", "zhuyinHint": "ㄌㄧㄨ", "audioText": "りゅ" },
+    { "id": "ryo", "type": "yoon", "char": "りょ", "reading": "ryo", "chineseHint": "り＋小ょ（りょこう＝旅行）", "zhuyinHint": "ㄌㄧㄛ", "audioText": "りょ" },
+    { "id": "gya", "type": "yoon", "char": "ぎゃ", "reading": "gya", "chineseHint": "ぎ＋小ゃ，濁音版的きゃ", "zhuyinHint": "ㄍㄧㄚ", "audioText": "ぎゃ" },
+    { "id": "gyu", "type": "yoon", "char": "ぎゅ", "reading": "gyu", "chineseHint": "ぎ＋小ゅ（ぎゅうにゅう＝牛奶）", "zhuyinHint": "ㄍㄧㄨ", "audioText": "ぎゅ" },
+    { "id": "gyo", "type": "yoon", "char": "ぎょ", "reading": "gyo", "chineseHint": "ぎ＋小ょ（きんぎょ＝金魚）", "zhuyinHint": "ㄍㄧㄛ", "audioText": "ぎょ" },
+    { "id": "ja", "type": "yoon", "char": "じゃ", "reading": "ja", "chineseHint": "じ＋小ゃ，像「家」的音（じゃあね＝再見囉）", "zhuyinHint": "ㄐㄧㄚ", "audioText": "じゃ" },
+    { "id": "ju", "type": "yoon", "char": "じゅ", "reading": "ju", "chineseHint": "じ＋小ゅ，像「居」的音（じゅう＝十，妳學過！）", "zhuyinHint": "ㄐㄩ", "audioText": "じゅ" },
+    { "id": "jo", "type": "yoon", "char": "じょ", "reading": "jo", "chineseHint": "じ＋小ょ（じょうず＝擅長）", "zhuyinHint": "ㄐㄧㄛ", "audioText": "じょ" },
+    { "id": "bya", "type": "yoon", "char": "びゃ", "reading": "bya", "chineseHint": "び＋小ゃ", "zhuyinHint": "ㄅㄧㄚ", "audioText": "びゃ" },
+    { "id": "byu", "type": "yoon", "char": "びゅ", "reading": "byu", "chineseHint": "び＋小ゅ", "zhuyinHint": "ㄅㄧㄨ", "audioText": "びゅ" },
+    { "id": "byo", "type": "yoon", "char": "びょ", "reading": "byo", "chineseHint": "び＋小ょ（びょういん＝醫院）", "zhuyinHint": "ㄅㄧㄛ", "audioText": "びょ" },
+    { "id": "pya", "type": "yoon", "char": "ぴゃ", "reading": "pya", "chineseHint": "ぴ＋小ゃ", "zhuyinHint": "ㄆㄧㄚ", "audioText": "ぴゃ" },
+    { "id": "pyu", "type": "yoon", "char": "ぴゅ", "reading": "pyu", "chineseHint": "ぴ＋小ゅ，像子彈飛過「咻」", "zhuyinHint": "ㄆㄧㄨ", "audioText": "ぴゅ" },
+    { "id": "pyo", "type": "yoon", "char": "ぴょ", "reading": "pyo", "chineseHint": "ぴ＋小ょ（ぴょんぴょん＝蹦蹦跳）", "zhuyinHint": "ㄆㄧㄛ", "audioText": "ぴょ" },
+    { "id": "okaasan", "type": "vocab", "char": "おかあさん", "furigana": "お母[かあ]さん", "reading": "okaasan", "meaning": "媽媽", "chineseHint": "「歐卡ー桑」→ 媽媽（かあ要拉長）", "zhuyinHint": "ㄛㄎㄚㄚㄙㄤ", "audioText": "おかあさん" },
+    { "id": "otousan", "type": "vocab", "char": "おとうさん", "furigana": "お父[とう]さん", "reading": "otousan", "meaning": "爸爸", "chineseHint": "「歐偷ー桑」→ 爸爸（とう要拉長）", "zhuyinHint": "ㄛㄊㄡㄡㄙㄤ", "audioText": "おとうさん" },
+    { "id": "oniisan", "type": "vocab", "char": "おにいさん", "furigana": "お兄[にい]さん", "reading": "oniisan", "meaning": "哥哥", "chineseHint": "「歐你ー桑」→ 哥哥（にい要拉長）", "zhuyinHint": "ㄛㄋㄧㄧㄙㄤ", "audioText": "おにいさん" },
+    { "id": "oneesan", "type": "vocab", "char": "おねえさん", "furigana": "お姉[ねえ]さん", "reading": "oneesan", "meaning": "姊姊", "chineseHint": "「歐內ー桑」→ 姊姊（ねえ要拉長）", "zhuyinHint": "ㄛㄋㄝㄝㄙㄤ", "audioText": "おねえさん" },
+    { "id": "ojisan", "type": "vocab", "char": "おじさん", "reading": "ojisan", "meaning": "叔叔／伯伯", "chineseHint": "「歐基桑」→ 叔叔（じ不拉長）", "zhuyinHint": "ㄛㄐㄧㄙㄤ", "audioText": "おじさん" },
+    { "id": "ojiisan", "type": "vocab", "char": "おじいさん", "reading": "ojiisan", "meaning": "爺爺／老爺爺", "chineseHint": "「歐基ー桑」→ 爺爺（じい拉長，跟叔叔只差一拍！）", "zhuyinHint": "ㄛㄐㄧㄧㄙㄤ", "compareWith": ["ojisan"], "audioText": "おじいさん" },
+    { "id": "obasan", "type": "vocab", "char": "おばさん", "reading": "obasan", "meaning": "阿姨／伯母", "chineseHint": "「歐巴桑」→ 阿姨（ば不拉長）", "zhuyinHint": "ㄛㄅㄚㄙㄤ", "audioText": "おばさん" },
+    { "id": "obaasan", "type": "vocab", "char": "おばあさん", "reading": "obaasan", "meaning": "奶奶／老奶奶", "chineseHint": "「歐巴ー桑」→ 奶奶（ばあ拉長，跟阿姨只差一拍！）", "zhuyinHint": "ㄛㄅㄚㄚㄙㄤ", "compareWith": ["obasan"], "audioText": "おばあさん" }
+  ],
+  "reviewItems": [
+    "ki",
+    "shi",
+    "chi"
+  ],
+  "dailyPlan": [
+    {
+      "day": 1,
+      "title": "拗音是什麼？きゃ・しゃ・ちゃ行（9個）",
+      "mode": "concepts+flipcard",
+      "items": ["concept-yoon", "kya", "kyu", "kyo", "sha", "shu", "sho", "cha", "chu", "cho"],
+      "review": ["ki", "shi", "chi"]
+    },
+    {
+      "day": 2,
+      "title": "にゃ・ひゃ・みゃ・りゃ行（12個）",
+      "mode": "flipcard",
+      "items": ["nya", "nyu", "nyo", "hya", "hyu", "hyo", "mya", "myu", "myo", "rya", "ryu", "ryo"],
+      "review": ["kya", "sha", "cha"]
+    },
+    {
+      "day": 3,
+      "title": "拗音小測驗（Day 1-2）",
+      "mode": "quiz",
+      "items": ["kya", "kyu", "kyo", "sha", "shu", "sho", "cha", "chu", "cho", "nya", "nyu", "nyo", "hya", "hyu", "hyo", "mya", "myu", "myo", "rya", "ryu", "ryo"],
+      "review": []
+    },
+    {
+      "day": 4,
+      "title": "濁音的拗音：ぎゃ・じゃ・びゃ・ぴゃ行（12個）",
+      "mode": "concepts+flipcard",
+      "items": ["concept-yoon-dakuon", "gya", "gyu", "gyo", "ja", "ju", "jo", "bya", "byu", "byo", "pya", "pyu", "pyo"],
+      "review": ["kya", "shu", "cho"]
+    },
+    {
+      "day": 5,
+      "title": "長音＋家人的稱呼（8個單字）",
+      "mode": "concepts+flipcard",
+      "items": ["concept-chouon-family", "okaasan", "otousan", "oniisan", "oneesan", "ojisan", "ojiisan", "obasan", "obaasan"],
+      "review": ["ja", "gyu"]
+    },
+    {
+      "day": 6,
+      "title": "對比挑戰：阿姨vs奶奶、叔叔vs爺爺",
+      "mode": "compare",
+      "items": ["obasan", "obaasan", "ojisan", "ojiisan"],
+      "review": ["okaasan", "otousan", "oniisan", "oneesan"]
+    },
+    {
+      "day": 7,
+      "title": "總複習測驗（拗音＋長音＋家人）",
+      "mode": "quiz",
+      "items": ["kya", "kyu", "kyo", "sha", "shu", "sho", "cha", "chu", "cho", "nya", "nyu", "nyo", "hya", "hyu", "hyo", "mya", "myu", "myo", "rya", "ryu", "ryo", "gya", "gyu", "gyo", "ja", "ju", "jo", "bya", "byu", "byo", "pya", "pyu", "pyo", "okaasan", "otousan", "oniisan", "oneesan", "ojisan", "ojiisan", "obasan", "obaasan"],
+      "review": []
+    }
+  ]
+},
+{
+  "week": 6,
+  "date": "2026-07-20",
+  "title": "片假名（上）ア〜ト＋ン — 外國來的字",
+  "settings": {
+    "dailyLimit": 20,
+    "fontSize": "large",
+    "showRomaji": true,
+    "playAudioAutomatically": true,
+    "reviewRatio": 0.3,
+    "classDay": "monday"
+  },
+  "concepts": [
+    {
+      "id": "concept-katakana",
+      "type": "concept",
+      "title": "片假名是什麼？",
+      "explanation": "媽，日文有兩套假名：平假名（圓圓的，妳已經全部學會了！）寫日本原本的字；片假名（方方角角的）專門寫外國來的字，像 コーヒー（咖啡）、バス（公車）。每個平假名都有一個對應的片假名，發音一模一樣，只是長相不同——就像英文的大寫和小寫。所以妳不用學新的音，只要認新的字形。",
+      "examples": [
+        "あ（平）＝ ア（片），都唸 a",
+        "か（平）＝ カ（片），都唸 ka",
+        "招牌、菜單上很多片假名：コーヒー、タクシー"
+      ],
+      "audioText": "片假名"
+    },
+    {
+      "id": "concept-choon-mark",
+      "type": "concept",
+      "title": "片假名的長音：一橫「ー」",
+      "explanation": "媽，片假名的長音最簡單：直接畫一橫「ー」，看到就把前面的音拉長一拍。ケーキ（蛋糕）唸「ケーki」、タクシー（計程車）結尾拉長。比平假名的長音好認多了！",
+      "examples": [
+        "ケーキ → ke—ki（蛋糕）",
+        "タクシー → ta-ku-shi—（計程車）",
+        "サッカー → 有小ッ要停一拍，還有ー拉長（足球）"
+      ],
+      "audioText": "片假名的長音"
+    },
+    {
+      "id": "concept-similar-kata",
+      "type": "concept",
+      "title": "雙胞胎片假名：シ／ツ、ソ／ン",
+      "explanation": "媽，片假名有兩對長得超像的雙胞胎，連日本小孩都會搞混：シ(shi)和ツ(tsu)、ソ(so)和ン(n)。記法：シ和ソ的筆畫比較「躺平」（從下往上挑）；ツ和ン…不對，是シ的兩點比較平、ツ的兩點比較直立。慢慢看、多比較幾次就認得了，今天專門練這個。",
+      "examples": [
+        "シ（shi）兩點橫排 ↔ ツ（tsu）兩點直排",
+        "ソ（so）一點 ↔ ン（n）一點，方向不同",
+        "分不清沒關係，用對比卡多看幾次"
+      ],
+      "audioText": "相似的片假名"
+    }
+  ],
+  "newItems": [
+    { "id": "kata-a", "type": "katakana", "char": "ア", "reading": "a", "chineseHint": "＝平假名 あ，唸「阿」", "zhuyinHint": "ㄚ", "audioText": "ア" },
+    { "id": "kata-i", "type": "katakana", "char": "イ", "reading": "i", "chineseHint": "＝平假名 い，唸「衣」", "zhuyinHint": "ㄧ", "audioText": "イ" },
+    { "id": "kata-u", "type": "katakana", "char": "ウ", "reading": "u", "chineseHint": "＝平假名 う，唸「烏」", "zhuyinHint": "ㄨ", "audioText": "ウ" },
+    { "id": "kata-e", "type": "katakana", "char": "エ", "reading": "e", "chineseHint": "＝平假名 え，像「工」字", "zhuyinHint": "ㄝ", "audioText": "エ" },
+    { "id": "kata-o", "type": "katakana", "char": "オ", "reading": "o", "chineseHint": "＝平假名 お，唸「喔」", "zhuyinHint": "ㄛ", "audioText": "オ" },
+    { "id": "kata-ka", "type": "katakana", "char": "カ", "reading": "ka", "chineseHint": "＝平假名 か，長得也像「力」", "zhuyinHint": "ㄎㄚ", "audioText": "カ" },
+    { "id": "kata-ki", "type": "katakana", "char": "キ", "reading": "ki", "chineseHint": "＝平假名 き，上半部很像", "zhuyinHint": "ㄎㄧ", "audioText": "キ" },
+    { "id": "kata-ku", "type": "katakana", "char": "ク", "reading": "ku", "chineseHint": "＝平假名 く", "zhuyinHint": "ㄎㄨ", "audioText": "ク" },
+    { "id": "kata-ke", "type": "katakana", "char": "ケ", "reading": "ke", "chineseHint": "＝平假名 け", "zhuyinHint": "ㄎㄝ", "audioText": "ケ" },
+    { "id": "kata-ko", "type": "katakana", "char": "コ", "reading": "ko", "chineseHint": "＝平假名 こ，像注音「ㄈ」反過來", "zhuyinHint": "ㄎㄛ", "audioText": "コ" },
+    { "id": "kata-sa", "type": "katakana", "char": "サ", "reading": "sa", "chineseHint": "＝平假名 さ，像「艹」字頭", "zhuyinHint": "ㄙㄚ", "audioText": "サ" },
+    { "id": "kata-shi", "type": "katakana", "char": "シ", "reading": "shi", "chineseHint": "＝平假名 し，兩點橫排（注意跟ツ的差別）", "zhuyinHint": "ㄒ", "audioText": "シ" },
+    { "id": "kata-su", "type": "katakana", "char": "ス", "reading": "su", "chineseHint": "＝平假名 す", "zhuyinHint": "ㄙㄨ", "audioText": "ス" },
+    { "id": "kata-se", "type": "katakana", "char": "セ", "reading": "se", "chineseHint": "＝平假名 せ，長得也像", "zhuyinHint": "ㄙㄝ", "audioText": "セ" },
+    { "id": "kata-so", "type": "katakana", "char": "ソ", "reading": "so", "chineseHint": "＝平假名 そ，一點＋一撇（注意跟ン的差別）", "zhuyinHint": "ㄙㄛ", "audioText": "ソ" },
+    { "id": "kata-ta", "type": "katakana", "char": "タ", "reading": "ta", "chineseHint": "＝平假名 た，像「夕」陽的夕", "zhuyinHint": "ㄊㄚ", "audioText": "タ" },
+    { "id": "kata-chi", "type": "katakana", "char": "チ", "reading": "chi", "chineseHint": "＝平假名 ち，像「千」字", "zhuyinHint": "ㄑ", "audioText": "チ" },
+    { "id": "kata-tsu", "type": "katakana", "char": "ツ", "reading": "tsu", "chineseHint": "＝平假名 つ，兩點直排（注意跟シ的差別）", "zhuyinHint": "ㄗㄨ", "compareWith": ["kata-shi"], "audioText": "ツ" },
+    { "id": "kata-te", "type": "katakana", "char": "テ", "reading": "te", "chineseHint": "＝平假名 て，像「テ」有三橫", "zhuyinHint": "ㄊㄝ", "audioText": "テ" },
+    { "id": "kata-to", "type": "katakana", "char": "ト", "reading": "to", "chineseHint": "＝平假名 と，像「卜」卦的卜", "zhuyinHint": "ㄊㄛ", "audioText": "ト" },
+    { "id": "kata-n", "type": "katakana", "char": "ン", "reading": "n", "chineseHint": "＝平假名 ん，一點＋一挑（注意跟ソ的差別）", "zhuyinHint": "ㄣ", "compareWith": ["kata-so"], "audioText": "ン" },
+    { "id": "aisu", "type": "vocab", "char": "アイス", "reading": "aisu", "meaning": "冰／冰淇淋", "chineseHint": "「阿衣思」→ 英文 ice，冰淇淋", "zhuyinHint": "ㄚㄧㄙ", "audioText": "アイス" },
+    { "id": "keeki", "type": "vocab", "char": "ケーキ", "reading": "keeki", "meaning": "蛋糕", "chineseHint": "「K—key」→ 英文 cake，ー要拉長", "zhuyinHint": "ㄎㄝㄎㄧ", "audioText": "ケーキ" },
+    { "id": "takushii", "type": "vocab", "char": "タクシー", "reading": "takushii", "meaning": "計程車", "chineseHint": "「他哭希ー」→ 英文 taxi，結尾拉長", "zhuyinHint": "ㄊㄚㄎㄨㄒㄧ", "audioText": "タクシー" },
+    { "id": "sakkaa", "type": "vocab", "char": "サッカー", "reading": "sakkaa", "meaning": "足球", "chineseHint": "「撒(停)卡ー」→ 英文 soccer，小ッ停一拍", "zhuyinHint": "ㄙㄚㄎㄚ", "audioText": "サッカー" }
+  ],
+  "reviewItems": [
+    "kya",
+    "ja",
+    "obaasan"
+  ],
+  "dailyPlan": [
+    {
+      "day": 1,
+      "title": "片假名是什麼？ア行＋カ行（10個）",
+      "mode": "concepts+flipcard",
+      "items": ["concept-katakana", "kata-a", "kata-i", "kata-u", "kata-e", "kata-o", "kata-ka", "kata-ki", "kata-ku", "kata-ke", "kata-ko"],
+      "review": []
+    },
+    {
+      "day": 2,
+      "title": "サ行＋タ行＋ン（11個）",
+      "mode": "flipcard",
+      "items": ["kata-sa", "kata-shi", "kata-su", "kata-se", "kata-so", "kata-ta", "kata-chi", "kata-tsu", "kata-te", "kata-to", "kata-n"],
+      "review": ["kata-a", "kata-ka"]
+    },
+    {
+      "day": 3,
+      "title": "片假名小測驗（Day 1-2）",
+      "mode": "quiz",
+      "items": ["kata-a", "kata-i", "kata-u", "kata-e", "kata-o", "kata-ka", "kata-ki", "kata-ku", "kata-ke", "kata-ko", "kata-sa", "kata-shi", "kata-su", "kata-se", "kata-so", "kata-ta", "kata-chi", "kata-tsu", "kata-te", "kata-to", "kata-n"],
+      "review": []
+    },
+    {
+      "day": 4,
+      "title": "雙胞胎對決：シ／ツ、ソ／ン",
+      "mode": "concepts+compare",
+      "items": ["concept-similar-kata", "kata-shi", "kata-tsu", "kata-so", "kata-n"],
+      "review": []
+    },
+    {
+      "day": 5,
+      "title": "長音「ー」＋第一批外來語（4個）",
+      "mode": "concepts+flipcard",
+      "items": ["concept-choon-mark", "aisu", "keeki", "takushii", "sakkaa"],
+      "review": ["kata-shi", "kata-tsu", "kata-so", "kata-n"]
+    },
+    {
+      "day": 6,
+      "title": "綜合翻卡複習",
+      "mode": "flipcard",
+      "items": ["kata-u", "kata-e", "kata-ki", "kata-ku", "kata-se", "kata-so", "kata-chi", "kata-tsu", "kata-n", "aisu", "keeki", "takushii"],
+      "review": []
+    },
+    {
+      "day": 7,
+      "title": "總複習測驗（片假名上＋外來語）",
+      "mode": "quiz",
+      "items": ["kata-a", "kata-i", "kata-u", "kata-e", "kata-o", "kata-ka", "kata-ki", "kata-ku", "kata-ke", "kata-ko", "kata-sa", "kata-shi", "kata-su", "kata-se", "kata-so", "kata-ta", "kata-chi", "kata-tsu", "kata-te", "kata-to", "kata-n", "aisu", "keeki", "takushii", "sakkaa"],
+      "review": []
+    }
+  ]
+},
+{
+  "week": 7,
+  "date": "2026-07-27",
+  "title": "片假名（下）ナ〜ワ＋生活外來語",
+  "settings": {
+    "dailyLimit": 20,
+    "fontSize": "large",
+    "showRomaji": true,
+    "playAudioAutomatically": true,
+    "reviewRatio": 0.3,
+    "classDay": "monday"
+  },
+  "concepts": [
+    {
+      "id": "concept-kata-dakuon",
+      "type": "concept",
+      "title": "片假名的濁音・半濁音",
+      "explanation": "媽，片假名的濁音規則跟平假名一模一樣：加兩點゛聲音變重（ハ→バ ba）、加圈圈゜變彈舌音（ハ→パ pa）。妳平假名已經會了，這裡完全不用重新學，看到就照樣唸！",
+      "examples": [
+        "カ ka → ガ ga（加゛）",
+        "ハ ha → バ ba → パ pa",
+        "テレビ的「ビ」就是 ヒ＋゛"
+      ],
+      "audioText": "片假名的濁音"
+    },
+    {
+      "id": "concept-loanword",
+      "type": "concept",
+      "title": "外來語：唸出來就猜得到！",
+      "explanation": "媽，片假名寫的外來語，很多就是英文的發音，唸出來就猜得到意思：バナナ＝banana香蕉、ホテル＝hotel飯店、バス＝bus公車。以後在日本看菜單、招牌，把片假名慢慢唸出聲，常常就懂了。這是學片假名最大的好處！",
+      "examples": [
+        "バナナ → banana → 香蕉",
+        "コーヒー → coffee → 咖啡",
+        "カラオケ → 卡拉OK（這個是日文傳到全世界的！）"
+      ],
+      "audioText": "外來語"
+    }
+  ],
+  "newItems": [
+    { "id": "kata-na", "type": "katakana", "char": "ナ", "reading": "na", "chineseHint": "＝平假名 な，像「十」加一撇", "zhuyinHint": "ㄋㄚ", "audioText": "ナ" },
+    { "id": "kata-ni", "type": "katakana", "char": "ニ", "reading": "ni", "chineseHint": "＝平假名 に，就是漢字「二」！", "zhuyinHint": "ㄋㄧ", "audioText": "ニ" },
+    { "id": "kata-nu", "type": "katakana", "char": "ヌ", "reading": "nu", "chineseHint": "＝平假名 ぬ，像「又」字", "zhuyinHint": "ㄋㄨ", "audioText": "ヌ" },
+    { "id": "kata-ne", "type": "katakana", "char": "ネ", "reading": "ne", "chineseHint": "＝平假名 ね，像「示」字旁", "zhuyinHint": "ㄋㄝ", "audioText": "ネ" },
+    { "id": "kata-no", "type": "katakana", "char": "ノ", "reading": "no", "chineseHint": "＝平假名 の，就是一撇", "zhuyinHint": "ㄋㄛ", "audioText": "ノ" },
+    { "id": "kata-ha", "type": "katakana", "char": "ハ", "reading": "ha", "chineseHint": "＝平假名 は，就是「八」字！", "zhuyinHint": "ㄏㄚ", "audioText": "ハ" },
+    { "id": "kata-hi", "type": "katakana", "char": "ヒ", "reading": "hi", "chineseHint": "＝平假名 ひ，像「比」的右半邊", "zhuyinHint": "ㄏㄧ", "audioText": "ヒ" },
+    { "id": "kata-fu", "type": "katakana", "char": "フ", "reading": "fu", "chineseHint": "＝平假名 ふ，一個角", "zhuyinHint": "ㄈㄨ", "audioText": "フ" },
+    { "id": "kata-he", "type": "katakana", "char": "ヘ", "reading": "he", "chineseHint": "＝平假名 へ，跟平假名幾乎一樣！", "zhuyinHint": "ㄏㄝ", "audioText": "ヘ" },
+    { "id": "kata-ho", "type": "katakana", "char": "ホ", "reading": "ho", "chineseHint": "＝平假名 ほ，像「木」加兩點", "zhuyinHint": "ㄏㄛ", "audioText": "ホ" },
+    { "id": "kata-ma", "type": "katakana", "char": "マ", "reading": "ma", "chineseHint": "＝平假名 ま，像「7」加一點", "zhuyinHint": "ㄇㄚ", "audioText": "マ" },
+    { "id": "kata-mi", "type": "katakana", "char": "ミ", "reading": "mi", "chineseHint": "＝平假名 み，三條斜線", "zhuyinHint": "ㄇㄧ", "audioText": "ミ" },
+    { "id": "kata-mu", "type": "katakana", "char": "ム", "reading": "mu", "chineseHint": "＝平假名 む，像「厶」", "zhuyinHint": "ㄇㄨ", "audioText": "ム" },
+    { "id": "kata-me", "type": "katakana", "char": "メ", "reading": "me", "chineseHint": "＝平假名 め，像打叉叉", "zhuyinHint": "ㄇㄝ", "audioText": "メ" },
+    { "id": "kata-mo", "type": "katakana", "char": "モ", "reading": "mo", "chineseHint": "＝平假名 も，長得也像", "zhuyinHint": "ㄇㄛ", "audioText": "モ" },
+    { "id": "kata-ya", "type": "katakana", "char": "ヤ", "reading": "ya", "chineseHint": "＝平假名 や，長得也像", "zhuyinHint": "ㄧㄚ", "audioText": "ヤ" },
+    { "id": "kata-yu", "type": "katakana", "char": "ユ", "reading": "yu", "chineseHint": "＝平假名 ゆ，像「ㄩ」躺著", "zhuyinHint": "ㄧㄨ", "audioText": "ユ" },
+    { "id": "kata-yo", "type": "katakana", "char": "ヨ", "reading": "yo", "chineseHint": "＝平假名 よ，像「E」反過來", "zhuyinHint": "ㄧㄛ", "audioText": "ヨ" },
+    { "id": "kata-ra", "type": "katakana", "char": "ラ", "reading": "ra", "chineseHint": "＝平假名 ら，上面一橫", "zhuyinHint": "ㄌㄚ", "audioText": "ラ" },
+    { "id": "kata-ri", "type": "katakana", "char": "リ", "reading": "ri", "chineseHint": "＝平假名 り，幾乎一樣！", "zhuyinHint": "ㄌㄧ", "audioText": "リ" },
+    { "id": "kata-ru", "type": "katakana", "char": "ル", "reading": "ru", "chineseHint": "＝平假名 る，右邊翹起來（注意跟レ的差別）", "zhuyinHint": "ㄌㄨ", "audioText": "ル" },
+    { "id": "kata-re", "type": "katakana", "char": "レ", "reading": "re", "chineseHint": "＝平假名 れ，只有一筆（注意跟ル的差別）", "zhuyinHint": "ㄌㄝ", "compareWith": ["kata-ru"], "audioText": "レ" },
+    { "id": "kata-ro", "type": "katakana", "char": "ロ", "reading": "ro", "chineseHint": "＝平假名 ろ，就是四方形「口」！", "zhuyinHint": "ㄌㄛ", "audioText": "ロ" },
+    { "id": "kata-wa", "type": "katakana", "char": "ワ", "reading": "wa", "chineseHint": "＝平假名 わ，像「ウ」少一點", "zhuyinHint": "ㄨㄚ", "audioText": "ワ" },
+    { "id": "koohii", "type": "vocab", "char": "コーヒー", "reading": "koohii", "meaning": "咖啡", "chineseHint": "「口ー厂一ー」→ coffee，兩個ー都拉長", "zhuyinHint": "ㄎㄛㄏㄧ", "audioText": "コーヒー" },
+    { "id": "terebi", "type": "vocab", "char": "テレビ", "reading": "terebi", "meaning": "電視", "chineseHint": "「貼咧逼」→ television 的縮寫", "zhuyinHint": "ㄊㄝㄌㄝㄅㄧ", "audioText": "テレビ" },
+    { "id": "basu", "type": "vocab", "char": "バス", "reading": "basu", "meaning": "公車", "chineseHint": "「巴思」→ bus", "zhuyinHint": "ㄅㄚㄙ", "audioText": "バス" },
+    { "id": "banana", "type": "vocab", "char": "バナナ", "reading": "banana", "meaning": "香蕉", "chineseHint": "「巴那那」→ banana", "zhuyinHint": "ㄅㄚㄋㄚㄋㄚ", "audioText": "バナナ" },
+    { "id": "raamen", "type": "vocab", "char": "ラーメン", "reading": "raamen", "meaning": "拉麵", "chineseHint": "「拉ー面」→ 拉麵，ラー要拉長", "zhuyinHint": "ㄌㄚㄇㄣ", "audioText": "ラーメン" },
+    { "id": "hoteru", "type": "vocab", "char": "ホテル", "reading": "hoteru", "meaning": "飯店", "chineseHint": "「后貼魯」→ hotel", "zhuyinHint": "ㄏㄛㄊㄝㄌㄨ", "audioText": "ホテル" },
+    { "id": "karaoke", "type": "vocab", "char": "カラオケ", "reading": "karaoke", "meaning": "卡拉OK", "chineseHint": "「卡拉歐開」→ 這個字是日本發明的！", "zhuyinHint": "ㄎㄚㄌㄚㄛㄎㄝ", "audioText": "カラオケ" }
+  ],
+  "reviewItems": [
+    "kata-shi",
+    "kata-tsu",
+    "kata-so",
+    "kata-n"
+  ],
+  "dailyPlan": [
+    {
+      "day": 1,
+      "title": "濁音規則＋ナ行・ハ行（10個）",
+      "mode": "concepts+flipcard",
+      "items": ["concept-kata-dakuon", "kata-na", "kata-ni", "kata-nu", "kata-ne", "kata-no", "kata-ha", "kata-hi", "kata-fu", "kata-he", "kata-ho"],
+      "review": ["kata-shi", "kata-tsu"]
+    },
+    {
+      "day": 2,
+      "title": "マ行・ヤ行・ラ行・ワ（14個）",
+      "mode": "flipcard",
+      "items": ["kata-ma", "kata-mi", "kata-mu", "kata-me", "kata-mo", "kata-ya", "kata-yu", "kata-yo", "kata-ra", "kata-ri", "kata-ru", "kata-re", "kata-ro", "kata-wa"],
+      "review": ["kata-na", "kata-ha"]
+    },
+    {
+      "day": 3,
+      "title": "片假名小測驗（Day 1-2）",
+      "mode": "quiz",
+      "items": ["kata-na", "kata-ni", "kata-nu", "kata-ne", "kata-no", "kata-ha", "kata-hi", "kata-fu", "kata-he", "kata-ho", "kata-ma", "kata-mi", "kata-mu", "kata-me", "kata-mo", "kata-ya", "kata-yu", "kata-yo", "kata-ra", "kata-ri", "kata-ru", "kata-re", "kata-ro", "kata-wa"],
+      "review": []
+    },
+    {
+      "day": 4,
+      "title": "生活外來語：咖啡・電視・香蕉…（7個）",
+      "mode": "concepts+flipcard",
+      "items": ["concept-loanword", "koohii", "terebi", "basu", "banana", "raamen", "hoteru", "karaoke"],
+      "review": ["keeki", "takushii", "pan"]
+    },
+    {
+      "day": 5,
+      "title": "對比挑戰：ル／レ＋復習シツソン",
+      "mode": "compare",
+      "items": ["kata-ru", "kata-re"],
+      "review": ["kata-shi", "kata-tsu", "kata-so", "kata-n"]
+    },
+    {
+      "day": 6,
+      "title": "綜合翻卡複習",
+      "mode": "flipcard",
+      "items": ["kata-nu", "kata-ne", "kata-fu", "kata-mu", "kata-me", "kata-yu", "kata-ru", "kata-re", "kata-wa", "koohii", "raamen", "karaoke"],
+      "review": []
+    },
+    {
+      "day": 7,
+      "title": "總複習測驗（片假名下＋外來語）",
+      "mode": "quiz",
+      "items": ["kata-na", "kata-ni", "kata-nu", "kata-ne", "kata-no", "kata-ha", "kata-hi", "kata-fu", "kata-he", "kata-ho", "kata-ma", "kata-mi", "kata-mu", "kata-me", "kata-mo", "kata-ya", "kata-yu", "kata-yo", "kata-ra", "kata-ri", "kata-ru", "kata-re", "kata-ro", "kata-wa", "koohii", "terebi", "basu", "pan", "banana", "raamen", "hoteru", "karaoke"],
+      "review": []
+    }
+  ]
+},
+{
+  "week": 8,
+  "date": "2026-08-03",
+  "title": "第1課完整版 — 我是〜／不是〜／是〜嗎？",
+  "settings": {
+    "dailyLimit": 20,
+    "fontSize": "large",
+    "showRomaji": true,
+    "playAudioAutomatically": true,
+    "reviewRatio": 0.3,
+    "classDay": "monday"
+  },
+  "concepts": [
+    {
+      "id": "concept-ja-arimasen",
+      "type": "concept",
+      "title": "「不是」怎麼說？",
+      "explanation": "媽，之前學了「わたしは みさおです」（我是みさお）。要說「不是」，把「です」換成「じゃ ありません」就好：わたしは いしゃじゃ ありません（我不是醫生）。公式：〜は 〜じゃ ありません ＝ 〜不是〜。",
+      "examples": [
+        "わたしは いしゃです。→ 我是醫生。",
+        "わたしは いしゃじゃ ありません。→ 我不是醫生。",
+        "わたしは にほんじんじゃ ありません。→ 我不是日本人。"
+      ],
+      "audioText": "不是怎麼說"
+    },
+    {
+      "id": "concept-desuka",
+      "type": "concept",
+      "title": "問句只要加「か」",
+      "explanation": "媽，日文的問句超簡單：句尾加一個「か」，就變成問題了，連問號都不用改語序！「〜ですか？」＝「是〜嗎？」。回答是：はい、そうです（是的）；不是：いいえ、ちがいます（不，不是）。",
+      "examples": [
+        "みさおさんは しゅふですか。→ 您是家庭主婦嗎？",
+        "はい、そうです。→ 是的，沒錯。",
+        "いいえ、ちがいます。→ 不，不是。"
+      ],
+      "audioText": "問句怎麼說"
+    },
+    {
+      "id": "concept-mo",
+      "type": "concept",
+      "title": "「〜も」＝「也」",
+      "explanation": "媽，要說「我也是」，把「は」換成「も」就好：わたしも たいわんじんです（我也是台灣人）。就換一個字，非常划算！",
+      "examples": [
+        "わたしは たいわんじんです。→ 我是台灣人。",
+        "ちんさんも たいわんじんです。→ 陳小姐也是台灣人。",
+        "は→も，「是」變「也是」"
+      ],
+      "audioText": "也怎麼說"
+    }
+  ],
+  "newItems": [
+    { "id": "kaishain", "type": "vocab", "char": "かいしゃいん", "furigana": "会社員[かいしゃいん]", "reading": "kaishain", "meaning": "公司職員", "chineseHint": "「開夏因」→ 上班族（しゃ是拗音！）", "zhuyinHint": "ㄎㄞㄒㄧㄚㄧㄣ", "audioText": "かいしゃいん" },
+    { "id": "ginkouin", "type": "vocab", "char": "ぎんこういん", "furigana": "銀行員[ぎんこういん]", "reading": "ginkouin", "meaning": "銀行行員", "chineseHint": "「金口ー因」→ 銀行員，漢字跟中文一樣", "zhuyinHint": "ㄍㄧㄣㄎㄛㄧㄣ", "audioText": "ぎんこういん" },
+    { "id": "isha", "type": "vocab", "char": "いしゃ", "furigana": "医者[いしゃ]", "reading": "isha", "meaning": "醫生", "chineseHint": "「衣夏」→ 醫者＝醫生", "zhuyinHint": "ㄧㄒㄧㄚ", "audioText": "いしゃ" },
+    { "id": "kyoushi", "type": "vocab", "char": "きょうし", "furigana": "教師[きょうし]", "reading": "kyoushi", "meaning": "教師（介紹自己的職業時用）", "chineseHint": "「Q—西」→ 教師（せんせい是稱呼別人）", "zhuyinHint": "ㄎㄧㄛㄒ", "audioText": "きょうし" },
+    { "id": "gakusei", "type": "vocab", "char": "がくせい", "furigana": "学生[がくせい]", "reading": "gakusei", "meaning": "學生", "chineseHint": "「嘎哭誰ー」→ 學生，漢字跟中文一樣", "zhuyinHint": "ㄍㄚㄎㄨㄙㄟ", "audioText": "がくせい" },
+    { "id": "shufu", "type": "vocab", "char": "しゅふ", "furigana": "主婦[しゅふ]", "reading": "shufu", "meaning": "家庭主婦", "chineseHint": "「噓夫」→ 主婦（しゅ是拗音！）", "zhuyinHint": "ㄒㄩㄈㄨ", "audioText": "しゅふ" },
+    { "id": "dare", "type": "vocab", "char": "だれ", "furigana": "誰[だれ]", "reading": "dare", "meaning": "誰", "chineseHint": "「搭咧」→ 誰", "zhuyinHint": "ㄉㄚㄌㄝ", "audioText": "だれ" },
+    { "id": "anohito", "type": "vocab", "char": "あのひと", "furigana": "あの人[ひと]", "reading": "ano hito", "meaning": "那個人", "chineseHint": "「阿諾喝衣偷」→ 那個人", "zhuyinHint": "ㄚㄋㄛㄏㄧㄊㄛ", "audioText": "あのひと" },
+    { "id": "hai", "type": "vocab", "char": "はい", "reading": "hai", "meaning": "是／對", "chineseHint": "「嗨」→ 是的", "zhuyinHint": "ㄏㄞ", "audioText": "はい" },
+    { "id": "iie", "type": "vocab", "char": "いいえ", "reading": "iie", "meaning": "不／不是", "chineseHint": "「衣ー耶」→ 不是（開頭拉長）", "zhuyinHint": "ㄧㄧㄝ", "audioText": "いいえ" },
+    { "id": "soudesu", "type": "vocab", "char": "そうです", "reading": "sou desu", "meaning": "是的、沒錯", "chineseHint": "「搜ー爹思」→ 是的沒錯（回答問題用）", "zhuyinHint": "ㄙㄡㄉㄝㄙ", "audioText": "そうです" },
+    { "id": "chigaimasu", "type": "vocab", "char": "ちがいます", "furigana": "違[ちが]います", "reading": "chigaimasu", "meaning": "不是、不對", "chineseHint": "「七嘎衣媽思」→ 不對、不是（否定回答用）", "zhuyinHint": "ㄑㄧㄍㄞㄇㄚㄙ", "audioText": "ちがいます" },
+    { "id": "nansai", "type": "vocab", "char": "なんさい", "furigana": "何歳[なんさい]", "reading": "nansai", "meaning": "幾歲", "chineseHint": "「難賽」→ 幾歲", "zhuyinHint": "ㄋㄢㄙㄞ", "audioText": "なんさい" },
+    { "id": "oikutsu", "type": "vocab", "char": "おいくつ", "reading": "oikutsu", "meaning": "幾歲（禮貌的問法）", "chineseHint": "「歐衣哭之」→ 請問貴庚（問長輩用這個）", "zhuyinHint": "ㄛㄧㄎㄨㄗ", "audioText": "おいくつ" },
+    { "id": "mo-particle", "type": "vocab", "char": "〜も", "reading": "mo", "meaning": "〜也", "chineseHint": "「谋」→ 也（把は換成も）", "zhuyinHint": "ㄇㄛ", "audioText": "も" },
+    { "id": "shufu-desu", "type": "grammar", "char": "わたしは しゅふです", "furigana": "私[わたし]は 主婦[しゅふ]です", "reading": "watashi wa shufu desu", "meaning": "我是家庭主婦", "chineseHint": "「哇他西哇 噓夫爹思」→ 我是主婦（換職業就能介紹自己）", "zhuyinHint": "ㄨㄚㄊㄚㄒㄨㄚ ㄒㄩㄈㄨㄉㄝㄙ", "example": "わたしは しゅふです。", "exampleMeaning": "我是家庭主婦。", "audioText": "わたしは しゅふです" },
+    { "id": "ja-arimasen-sent", "type": "grammar", "char": "わたしは いしゃじゃ ありません", "furigana": "私[わたし]は 医者[いしゃ]じゃ ありません", "reading": "watashi wa isha ja arimasen", "meaning": "我不是醫生", "chineseHint": "「〜加 阿哩媽現」→ 不是〜（です換成じゃありません）", "zhuyinHint": "ㄨㄚㄊㄚㄒㄨㄚ ㄧㄒㄧㄚㄐㄧㄚ ㄚㄌㄧㄇㄚㄙㄣ", "example": "わたしは いしゃじゃ ありません。", "exampleMeaning": "我不是醫生。", "audioText": "わたしは いしゃじゃありません" },
+    { "id": "dare-desuka", "type": "grammar", "char": "あのひとは だれですか", "furigana": "あの人[ひと]は 誰[だれ]ですか", "reading": "ano hito wa dare desu ka", "meaning": "那個人是誰？", "chineseHint": "「阿諾喝衣偷哇 搭咧爹思卡」→ 那個人是誰？", "zhuyinHint": "ㄚㄋㄛㄏㄧㄊㄛㄨㄚ ㄉㄚㄌㄝㄉㄝㄙㄎㄚ", "example": "あのひとは だれですか。", "exampleMeaning": "那個人是誰？", "audioText": "あのひとは だれですか" },
+    { "id": "desuka-q", "type": "grammar", "char": "みさおさんは しゅふですか", "furigana": "みさおさんは 主婦[しゅふ]ですか", "reading": "misao san wa shufu desu ka", "meaning": "みさお女士是家庭主婦嗎？", "chineseHint": "句尾加「か」就是問句 → 回答：はい、そうです", "zhuyinHint": "ㄇㄧㄙㄚㄛㄙㄤㄨㄚ ㄒㄩㄈㄨㄉㄝㄙㄎㄚ", "example": "みさおさんは しゅふですか。— はい、そうです。", "exampleMeaning": "您是主婦嗎？— 是的，沒錯。", "audioText": "みさおさんは しゅふですか" },
+    { "id": "watashi-mo", "type": "grammar", "char": "わたしも たいわんじんです", "furigana": "私[わたし]も 台湾人[たいわんじん]です", "reading": "watashi mo taiwanjin desu", "meaning": "我也是台灣人", "chineseHint": "「哇他西谋」→ 我也是〜（は換成も）", "zhuyinHint": "ㄨㄚㄊㄚㄒㄇㄛ ㄊㄞㄨㄢㄐㄧㄣㄉㄝㄙ", "example": "わたしも たいわんじんです。", "exampleMeaning": "我也是台灣人。", "audioText": "わたしも たいわんじんです" },
+    { "id": "oikutsu-desuka", "type": "grammar", "char": "おいくつですか", "reading": "oikutsu desu ka", "meaning": "請問您幾歲？", "chineseHint": "「歐衣哭之爹思卡」→ 請問貴庚？", "zhuyinHint": "ㄛㄧㄎㄨㄗㄉㄝㄙㄎㄚ", "example": "おいくつですか。", "exampleMeaning": "請問您幾歲？", "audioText": "おいくつですか" }
+  ],
+  "reviewItems": [
+    "hajimemashite",
+    "watashi-intro",
+    "kara-kimashita",
+    "taiwanjin"
+  ],
+  "dailyPlan": [
+    {
+      "day": 1,
+      "title": "職業的說法（6個單字）",
+      "mode": "flipcard",
+      "items": ["kaishain", "ginkouin", "isha", "kyoushi", "gakusei", "shufu"],
+      "review": ["watashi-intro", "taiwanjin"]
+    },
+    {
+      "day": 2,
+      "title": "「不是〜」：じゃありません",
+      "mode": "concepts+flipcard",
+      "items": ["concept-ja-arimasen", "shufu-desu", "ja-arimasen-sent"],
+      "review": ["isha", "shufu", "kaishain"]
+    },
+    {
+      "day": 3,
+      "title": "職業＋句型小測驗（Day 1-2）",
+      "mode": "quiz",
+      "items": ["kaishain", "ginkouin", "isha", "kyoushi", "gakusei", "shufu", "shufu-desu", "ja-arimasen-sent"],
+      "review": []
+    },
+    {
+      "day": 4,
+      "title": "問句「〜ですか」＋回答（はい／いいえ）",
+      "mode": "concepts+flipcard",
+      "items": ["concept-desuka", "hai", "iie", "soudesu", "chigaimasu", "dare", "anohito", "dare-desuka", "desuka-q"],
+      "review": ["shufu-desu"]
+    },
+    {
+      "day": 5,
+      "title": "「〜も」（也）＋問年紀",
+      "mode": "concepts+flipcard",
+      "items": ["concept-mo", "mo-particle", "watashi-mo", "nansai", "oikutsu", "oikutsu-desuka"],
+      "review": ["hai", "iie", "soudesu", "chigaimasu"]
+    },
+    {
+      "day": 6,
+      "title": "綜合翻卡複習",
+      "mode": "flipcard",
+      "items": ["kaishain", "isha", "shufu", "dare", "anohito", "soudesu", "chigaimasu", "ja-arimasen-sent", "dare-desuka", "watashi-mo"],
+      "review": ["hajimemashite", "kara-kimashita"]
+    },
+    {
+      "day": 7,
+      "title": "第1課總測驗",
+      "mode": "quiz",
+      "items": ["kaishain", "ginkouin", "isha", "kyoushi", "gakusei", "shufu", "dare", "anohito", "hai", "iie", "soudesu", "chigaimasu", "nansai", "oikutsu", "mo-particle", "shufu-desu", "ja-arimasen-sent", "dare-desuka", "desuka-q", "watashi-mo", "oikutsu-desuka"],
+      "review": []
+    }
+  ]
 }
 ];
