@@ -19,15 +19,21 @@ docs/
   PITFALLS.md           — 地雷經驗總結 ⚠️ 必讀
 ```
 
-## 每週工作流程
+## 每週工作流程（雙軌）
 
+**A. 自學模式（目前主線，沒有老師上課）**
 ```
-1. 媽媽上完課
-2. 你跟 Claude 說：「老師這週教了 さ行 和 ざ行，還有xxx單字」
-3. Claude 產出 week-XX.json（含 7 天 dailyPlan）
-4. 你放到 weeks/ 資料夾
-5. 瀏覽器開啟 index.html?week=week-XX
-6. 媽媽每天打開 → 自動顯示「今天是第 N 天」的練習
+1. 照 docs/CURRICULUM-MAP.md 的順序，跟 Claude 說「產生第 N 單元」
+2. Claude 把新單元寫進 weeks/all-weeks.js（date = 上一單元 +7 天的週一）
+3. 跑驗證（id 查重、dailyPlan 可解析）→ 更新 version.txt → commit + push
+4. 媽媽每天打開網頁 → 自動顯示「今天所在週的第 N 天」練習
+```
+
+**B. 上課模式（若恢復上課）**
+```
+1. 媽媽上完課，你跟 Claude 說：「老師這週教了 XXX」
+2. Claude 產出該週內容併入 all-weeks.js，date = 實際上課日
+3. 後續自學單元的 date 順延，避免重疊
 ```
 
 ## 每日學習節奏（7 天設計）
@@ -73,11 +79,14 @@ docs/
 - ⚠️ **新舊混合洗牌**：翻卡的新項目和複習項目不能混在一起洗牌，新的在前、複習在後
 - ⚠️ **翻卡操作提示**：年長使用者不知道要點卡片翻面，必須加文字提示
 - ⚠️ **跨週複習遺失欄位**：findById 查找複習項目時要搜尋 ALL_WEEKS，不只當週
+- ⚠️ **預排未來單元**：首頁預設週要選「今天所在的週」，不是最新一週
+- ⚠️ **id 全域唯一**：新單元的 id 要跟全部舊週查重；教過的字放 review 不要重教
 
 ## 開發追蹤
 
 - [DAG-TODO v1](docs/DAG-TODO.md) — 初始開發
 - [DAG-TODO v2](docs/DAG-TODO-v2.md) — 修正學習範圍與每日規劃（2026-04-06）
+- [CURRICULUM-MAP](docs/CURRICULUM-MAP.md) — 全書自學課程地圖 L1–L25（2026-07-12）⭐ 產生新單元前必看
 
 ## 教材資訊
 
