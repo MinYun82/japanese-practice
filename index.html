@@ -557,6 +557,39 @@ rt {
 .today-banner p { font-size: 0.8rem; opacity: 0.9; }
 
 /* Google Fonts 載入 */
+/* ===== 手寫描紅 ===== */
+.trace-wrap { text-align: center; }
+.trace-canvas {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  touch-action: none;          /* 手指描寫時不要捲動頁面 */
+  width: 100%;
+  max-width: 320px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* ===== 對話朗讀 ===== */
+.dialogue-line {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.6rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.2s, background 0.2s;
+}
+.dialogue-line.speaking {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+.dialogue-line .who { font-size: 0.7rem; color: var(--text-light); margin-bottom: 0.2rem; }
+.dialogue-line .jp { font-family: var(--font-jp); font-size: 1.35rem; font-weight: 700; line-height: 1.8; }
+.dialogue-line .zh { font-size: 0.85rem; color: var(--text-light); margin-top: 0.3rem; }
+
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+TC:wght@400;600;700&display=swap');
 </style>
 </head>
@@ -585,7 +618,7 @@ rt {
     </div>
 
     <!-- 假名閃卡遊戲 — 常駐入口，隨時可練發音 -->
-    <div onclick="App.startKanaGame()" style="background:var(--accent-light);border:2px solid var(--accent);border-radius:var(--radius);padding:0.9rem 1rem;margin-bottom:1rem;cursor:pointer;display:flex;align-items:center;gap:0.8rem;-webkit-tap-highlight-color:transparent;">
+    <div onclick="App.startKanaGame()" style="background:var(--accent-light);border:2px solid var(--accent);border-radius:var(--radius);padding:0.9rem 1rem;margin-bottom:0.6rem;cursor:pointer;display:flex;align-items:center;gap:0.8rem;-webkit-tap-highlight-color:transparent;">
       <span style="font-size:2rem;">🎴</span>
       <div style="flex:1;">
         <div style="font-size:1rem;font-weight:700;color:var(--accent);">假名閃卡遊戲</div>
@@ -593,6 +626,27 @@ rt {
       </div>
       <span style="font-size:1.2rem;color:var(--accent);">▶</span>
     </div>
+
+    <!-- 手寫描紅 — 常駐入口，練本週的假名字形 -->
+    <div onclick="App.startTrace()" style="background:var(--warning-light);border:2px solid var(--warning);border-radius:var(--radius);padding:0.9rem 1rem;margin-bottom:0.6rem;cursor:pointer;display:flex;align-items:center;gap:0.8rem;-webkit-tap-highlight-color:transparent;">
+      <span style="font-size:2rem;">✍️</span>
+      <div style="flex:1;">
+        <div style="font-size:1rem;font-weight:700;color:var(--warning);">手寫描紅</div>
+        <div style="font-size:0.75rem;color:var(--text-light);">用手指照著灰色的字描寫，邊寫邊記</div>
+      </div>
+      <span style="font-size:1.2rem;color:var(--warning);">▶</span>
+    </div>
+
+    <!-- 本週對話 — 只在該週有 dialogue 時顯示 -->
+    <div id="dialogueEntry" onclick="App.startDialogue()" style="display:none;background:var(--success-light);border:2px solid var(--success);border-radius:var(--radius);padding:0.9rem 1rem;margin-bottom:0.6rem;cursor:pointer;align-items:center;gap:0.8rem;-webkit-tap-highlight-color:transparent;">
+      <span style="font-size:2rem;">💬</span>
+      <div style="flex:1;">
+        <div style="font-size:1rem;font-weight:700;color:var(--success);">本週對話</div>
+        <div style="font-size:0.75rem;color:var(--text-light);" id="dialogueEntryDesc">聽一段小對話，句句可以點著跟讀</div>
+      </div>
+      <span style="font-size:1.2rem;color:var(--success);">▶</span>
+    </div>
+    <div style="margin-bottom:0.4rem;"></div>
 
     <!-- 簡單的鼓勵語 + 進度 -->
     <div style="text-align:center;margin-bottom:1rem;">
@@ -644,6 +698,10 @@ rt {
           <div class="mode-btn" onclick="App.startMode('quiz')">
             <span class="mode-icon">✏️</span>
             <span class="mode-label">選擇題</span>
+          </div>
+          <div class="mode-btn" onclick="App.startMode('listen')">
+            <span class="mode-icon">👂</span>
+            <span class="mode-label">聽音選字</span>
           </div>
         </div>
         <div id="speechBadge" class="speech-badge off" style="margin-top:0.5rem;">語音載入中</div>
@@ -711,6 +769,40 @@ rt {
       <span class="card-counter" id="kanaGameCounter"></span>
     </div>
     <div id="kanaGameArea"></div>
+  </div>
+</div>
+
+<!-- ===== 手寫描紅畫面 ===== -->
+<div id="screen-trace" class="screen">
+  <div class="container">
+    <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;">
+      <button class="btn btn-icon btn-outline" onclick="App.goHome()">←</button>
+      <h2 style="font-size:1.1rem;">手寫描紅</h2>
+      <span class="card-counter" id="traceCounter"></span>
+    </div>
+    <div class="trace-wrap">
+      <div id="traceInfo" style="margin-bottom:0.5rem;min-height:1.6rem;"></div>
+      <canvas id="traceCanvas" class="trace-canvas" width="320" height="320"></canvas>
+      <div style="font-size:0.8rem;color:var(--text-light);margin-top:0.4rem;">用手指沿著灰色的字，慢慢描寫</div>
+      <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+        <button class="btn btn-outline" style="flex:1" onclick="App.traceHear()">🔊 聽發音</button>
+        <button class="btn btn-outline" style="flex:1" onclick="App.traceClear()">🧽 擦掉重寫</button>
+      </div>
+      <button class="btn btn-primary btn-block" style="margin-top:0.5rem" onclick="App.traceNext()">下一個字 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 對話朗讀畫面 ===== -->
+<div id="screen-dialogue" class="screen">
+  <div class="container">
+    <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.8rem;">
+      <button class="btn btn-icon btn-outline" onclick="App.stopDialogue()">←</button>
+      <h2 style="font-size:1.1rem;" id="dialogueTitle">本週對話</h2>
+    </div>
+    <div style="font-size:0.8rem;color:var(--text-light);margin-bottom:0.8rem;">💡 點任何一句可以單獨再聽；聽完試著跟著唸一次</div>
+    <div id="dialogueList"></div>
+    <button class="btn btn-primary btn-block" style="margin-top:0.75rem" onclick="App.playDialogueAll()">▶ 從頭朗讀整段</button>
   </div>
 </div>
 
@@ -964,6 +1056,18 @@ var App = (function () {
       enc.textContent = '好的開始！再多練幾題吧！';
     }
 
+    // 本週對話入口（該週有 dialogue 才顯示）
+    var dlgEntry = document.getElementById('dialogueEntry');
+    if (dlgEntry) {
+      if (weekConfig.dialogue && weekConfig.dialogue.lines && weekConfig.dialogue.lines.length) {
+        dlgEntry.style.display = 'flex';
+        document.getElementById('dialogueEntryDesc').textContent =
+          '「' + (weekConfig.dialogue.title || '本週對話') + '」— 句句可以點著跟讀';
+      } else {
+        dlgEntry.style.display = 'none';
+      }
+    }
+
     // 渲染今日 Banner 和每日時間線
     renderDailyTimeline();
   }
@@ -995,7 +1099,7 @@ var App = (function () {
     var html = '';
 
     // 模式對應 emoji
-    var modeEmoji = { 'concepts': '📖', 'flipcard': '🃏', 'compare': '🔀', 'quiz': '✏️' };
+    var modeEmoji = { 'concepts': '📖', 'flipcard': '🃏', 'compare': '🔀', 'quiz': '✏️', 'listen': '👂' };
 
     for (var i = 0; i < overview.length; i++) {
       var d = overview[i];
@@ -1054,6 +1158,9 @@ var App = (function () {
       case 'quiz':
         initQuiz();
         showScreen('quiz');
+        break;
+      case 'listen':
+        initQuiz(QuizGenerator.generateListeningQuiz(weekConfig, { count: 10 }));
         break;
       case 'daily':
         initDailyPractice();
@@ -1326,6 +1433,221 @@ var App = (function () {
     document.getElementById('kanaGameArea').innerHTML = html;
   }
 
+  // ========== 手寫描紅 ==========
+  // 灰色底字畫在 canvas 上，媽媽用手指（或滑鼠）沿著描寫。
+  // 不評分、不記進度——重點是「動手寫過」幫助記字形。
+
+  var traceCards = [];
+  var traceIndex = 0;
+  var TRACE_KANA_TYPES = { hiragana: 1, dakuon: 1, handakuon: 1, yoon: 1, katakana: 1 };
+
+  function startTrace() {
+    // 優先練本週的假名；本週沒有假名（單字句型週）就隨機抽假名池
+    var pool = ((weekConfig && weekConfig.newItems) || []).filter(function (it) {
+      return TRACE_KANA_TYPES[it.type];
+    });
+    if (pool.length === 0) {
+      pool = QuizGenerator.generateKanaGame({ count: 10 });
+    }
+    traceCards = QuizGenerator._utils.shuffle(pool).slice(0, 10);
+    traceIndex = 0;
+    traceSetup();
+    renderTrace();
+    showScreen('trace');
+  }
+
+  function renderTrace() {
+    if (traceIndex >= traceCards.length) {
+      toast('描紅練習完成！手都記住了！');
+      goHome();
+      return;
+    }
+    var c = traceCards[traceIndex];
+    document.getElementById('traceCounter').textContent =
+      (traceIndex + 1) + ' / ' + traceCards.length;
+
+    var info = '<span style="font-size:1.15rem;font-weight:700;">' + esc(c.reading || '') + '</span>';
+    if (c.zhuyinHint) {
+      info += ' <span style="color:var(--primary);font-size:1rem;">（' + esc(c.zhuyinHint) + '）</span>';
+    }
+    document.getElementById('traceInfo').innerHTML = info;
+
+    traceDrawGuide();
+    Speech.speak(c.audioText || c.char);
+  }
+
+  // 畫輔助線＋灰色底字
+  function traceDrawGuide() {
+    var canvas = document.getElementById('traceCanvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var c = traceCards[traceIndex];
+    if (!c) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // 十字虛線（習字簿的感覺）
+    ctx.save();
+    ctx.strokeStyle = '#ECECF2';
+    ctx.setLineDash([6, 6]);
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(canvas.width / 2, 0);
+    ctx.lineTo(canvas.width / 2, canvas.height);
+    ctx.moveTo(0, canvas.height / 2);
+    ctx.lineTo(canvas.width, canvas.height / 2);
+    ctx.stroke();
+    ctx.restore();
+
+    // 灰色底字（多字元如「きゃ」自動縮小）
+    var ch = c.char || '';
+    var size = Math.floor(250 / Math.max(1, ch.length));
+    ctx.fillStyle = '#D8D8E0';
+    ctx.font = '700 ' + size + 'px ' +
+      getComputedStyle(document.documentElement).getPropertyValue('--font-jp');
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(ch, canvas.width / 2, canvas.height / 2 + 6);
+  }
+
+  // 描寫事件（pointer events 同時涵蓋手指與滑鼠；只綁一次）
+  function traceSetup() {
+    var canvas = document.getElementById('traceCanvas');
+    if (!canvas || canvas._traceReady) return;
+    canvas._traceReady = true;
+
+    var ctx = canvas.getContext('2d');
+    var drawing = false;
+
+    function pos(e) {
+      var r = canvas.getBoundingClientRect();
+      return {
+        x: (e.clientX - r.left) * (canvas.width / r.width),
+        y: (e.clientY - r.top) * (canvas.height / r.height)
+      };
+    }
+
+    canvas.addEventListener('pointerdown', function (e) {
+      e.preventDefault();
+      drawing = true;
+      if (canvas.setPointerCapture) canvas.setPointerCapture(e.pointerId);
+      var p = pos(e);
+      ctx.strokeStyle = (getComputedStyle(document.documentElement)
+        .getPropertyValue('--primary') || '#4A90D9').trim();
+      ctx.lineWidth = 12;               // 筆畫粗一點，長輩好描
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(p.x + 0.1, p.y + 0.1); // 點一下也要留痕跡
+      ctx.stroke();
+    });
+
+    canvas.addEventListener('pointermove', function (e) {
+      if (!drawing) return;
+      e.preventDefault();
+      var p = pos(e);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+    });
+
+    function stopDraw() { drawing = false; }
+    canvas.addEventListener('pointerup', stopDraw);
+    canvas.addEventListener('pointercancel', stopDraw);
+    canvas.addEventListener('pointerleave', stopDraw);
+  }
+
+  function traceHear() {
+    var c = traceCards[traceIndex];
+    if (c) Speech.speak(c.audioText || c.char);
+  }
+
+  function traceClear() {
+    traceDrawGuide();
+  }
+
+  function traceNext() {
+    traceIndex++;
+    renderTrace();
+  }
+
+  // ========== 本週對話朗讀 ==========
+  // 週資料的 dialogue: { title, lines: [{ speaker, jp, furigana?, zh }] }
+  // 點單句聽一次；「從頭朗讀」逐句連播並高亮目前句。
+
+  var _dlgSession = 0; // 播放序號：任何新動作都 +1，讓被取消的舊回呼失效
+
+  function startDialogue() {
+    var d = weekConfig && weekConfig.dialogue;
+    if (!d || !d.lines || !d.lines.length) {
+      toast('這週沒有對話');
+      return;
+    }
+    document.getElementById('dialogueTitle').textContent = '💬 ' + (d.title || '本週對話');
+
+    var html = '';
+    for (var i = 0; i < d.lines.length; i++) {
+      var ln = d.lines[i];
+      html += '<div class="dialogue-line" id="dlgLine' + i + '" onclick="App.playDialogueLine(' + i + ')">';
+      html += '<div class="who">' + esc(ln.speaker || '') + '</div>';
+      html += '<div class="jp">' + rubyHtml(ln.jp, ln.furigana) + '</div>';
+      if (ln.zh) html += '<div class="zh">' + esc(ln.zh) + '</div>';
+      html += '</div>';
+    }
+    document.getElementById('dialogueList').innerHTML = html;
+    showScreen('dialogue');
+  }
+
+  function _dlgHighlight(idx) {
+    var lines = document.querySelectorAll('#dialogueList .dialogue-line');
+    for (var i = 0; i < lines.length; i++) {
+      lines[i].classList.remove('speaking');
+    }
+    if (idx >= 0 && lines[idx]) {
+      lines[idx].classList.add('speaking');
+      lines[idx].scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }
+  }
+
+  function playDialogueLine(idx) {
+    var d = weekConfig && weekConfig.dialogue;
+    if (!d || !d.lines[idx]) return;
+    var session = ++_dlgSession;
+    _dlgHighlight(idx);
+    Speech.speak(d.lines[idx].jp, 0.75, function () {
+      if (session === _dlgSession) _dlgHighlight(-1);
+    });
+  }
+
+  function playDialogueAll() {
+    var d = weekConfig && weekConfig.dialogue;
+    if (!d || !d.lines || !d.lines.length) return;
+    var session = ++_dlgSession;
+    var i = 0;
+
+    function next() {
+      // 換畫面或使用者點了別句 → 停止這條連播
+      if (session !== _dlgSession || currentScreen !== 'dialogue') return;
+      if (i >= d.lines.length) {
+        _dlgHighlight(-1);
+        toast('聽完了！試著自己唸一遍 💪');
+        return;
+      }
+      _dlgHighlight(i);
+      Speech.speak(d.lines[i].jp, 0.75, function () {
+        i++;
+        setTimeout(next, 600); // 句間停一下，留跟讀空間
+      });
+    }
+    next();
+  }
+
+  function stopDialogue() {
+    _dlgSession++;
+    Speech.stop();
+    goHome();
+  }
+
   // ========== 測驗 ==========
 
   function initQuiz(questions) {
@@ -1353,7 +1675,12 @@ var App = (function () {
     html += '<div class="prompt">' + esc(q.question) + '</div>';
 
     if (q.questionAudio) {
-      html += '<button class="btn btn-icon btn-outline" onclick="Speech.speak(\'' + escAttr(q.questionAudio) + '\')" style="margin:0.5rem auto">🔊</button>';
+      if (q.listening) {
+        // 聽音選字：聲音就是題目，給一顆大大的重播鍵
+        html += '<button class="btn btn-primary" onclick="Speech.speak(\'' + escAttr(q.questionAudio) + '\')" style="font-size:1.6rem;padding:0.9rem 2rem;margin:0.8rem auto;display:block;">🔊 再聽一次</button>';
+      } else {
+        html += '<button class="btn btn-icon btn-outline" onclick="Speech.speak(\'' + escAttr(q.questionAudio) + '\')" style="margin:0.5rem auto">🔊</button>';
+      }
     }
 
     // 如果題目是假名字，大字顯示（有漢字則漢字為主、假名標音）
@@ -1506,6 +1833,8 @@ var App = (function () {
       startFlipcardWithResolved(currentResolved);
     } else if (mode === 'quiz') {
       startQuizWithItems(currentResolved.allItems);
+    } else if (mode === 'listen') {
+      startListenWithItems(currentResolved.allItems);
     } else {
       // 預設：根據項目數量決定模式
       if (currentResolved.allItems.length <= 5) {
@@ -1547,6 +1876,20 @@ var App = (function () {
     initQuiz(questions);
   }
 
+  // 用指定項目啟動聽音選字
+  function startListenWithItems(items) {
+    var tempConfig = {
+      newItems: items,
+      reviewItems: [],
+      settings: weekConfig.settings
+    };
+    var questions = QuizGenerator.generateListeningQuiz(tempConfig, {
+      count: Math.min(items.length, 10),
+      includeReview: false
+    });
+    initQuiz(questions);
+  }
+
   // 用指定項目啟動對比
   function initCompareWithItems(items) {
     var tempConfig = {
@@ -1580,6 +1923,8 @@ var App = (function () {
       startFlipcardWithResolved(currentResolved);
     } else if (nextMode === 'quiz') {
       startQuizWithItems(currentResolved.allItems);
+    } else if (nextMode === 'listen') {
+      startListenWithItems(currentResolved.allItems);
     } else {
       startFlipcardWithResolved(currentResolved);
     }
@@ -1656,6 +2001,14 @@ var App = (function () {
     startKanaGame: startKanaGame,
     kanaGameFlip: kanaGameFlip,
     kanaGameNext: kanaGameNext,
+    startTrace: startTrace,
+    traceHear: traceHear,
+    traceClear: traceClear,
+    traceNext: traceNext,
+    startDialogue: startDialogue,
+    playDialogueLine: playDialogueLine,
+    playDialogueAll: playDialogueAll,
+    stopDialogue: stopDialogue,
     compareNav: compareNav,
     answerQuiz: answerQuiz,
     continueAfterConcepts: continueAfterConcepts
