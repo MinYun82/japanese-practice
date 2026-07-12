@@ -497,6 +497,69 @@ var QuizGenerator = (function () {
   }
 
   // ========================================================================
+  // 3.5 generateListeningQuiz — 聽音選字測驗
+  // ========================================================================
+
+  /**
+   * 產生「聽音選字」題：播放聲音，從 4 個字裡選出聽到的那一個。
+   * 方向和一般測驗相反（音→字），專練聽力。
+   * 假名題的干擾項取同型別假名的「字」；單字／句型題取其他項目的「字」。
+   *
+   * @param {object} weekConfig - 週設定 JSON（或 {newItems: [...]} 臨時設定）
+   * @param {object} [options]  - { count: 10, includeReview: true }
+   * @returns {array} 測驗題目陣列（格式與 generateQuiz 相容，多帶 listening: true）
+   */
+  function generateListeningQuiz(weekConfig, options) {
+    var opts = Object.assign({ count: 10, includeReview: true }, options || {});
+
+    var pool = opts.includeReview
+      ? getAllItems(weekConfig)
+      : (weekConfig.newItems || []).slice();
+
+    var selected = shuffle(pool).slice(0, opts.count);
+
+    return selected.map(function (item) {
+      var distractorChars = [];
+
+      if (item.meaning) {
+        // 單字／句型：拿池裡其他項目的「字」當干擾（不混入單一假名）
+        var seen = {};
+        seen[item.char] = true;
+        shuffle(pool).forEach(function (it) {
+          if (distractorChars.length >= 3) return;
+          if (!it.char || !it.meaning || seen[it.char]) return;
+          seen[it.char] = true;
+          distractorChars.push(it.char);
+        });
+      } else {
+        // 假名：同型別假名的字（きゃ 的干擾是其他拗音）
+        distractorChars = pickDistractors(item, 3).map(function (d) { return d.char; });
+      }
+
+      var allOptions = [
+        { char: item.char, text: '', isCorrect: true, id: item.id || item.reading }
+      ];
+      distractorChars.forEach(function (c, idx) {
+        allOptions.push({
+          char: c,
+          text: '',
+          isCorrect: false,
+          id: (item.id || item.reading) + '-listen-' + idx
+        });
+      });
+
+      return {
+        question: '仔細聽，是哪一個？',
+        questionAudio: item.audioText || item.char,
+        listening: true,
+        options: shuffle(allOptions),
+        type: 'listen-to-char',
+        itemId: item.id || item.reading
+      };
+    });
+  }
+
+  // ========================================================================
   // 4. generateDailyPractice — 每日智慧練習
   // ========================================================================
 
@@ -594,6 +657,7 @@ var QuizGenerator = (function () {
     generateComparisonCards: generateComparisonCards,
     generateFlipCards: generateFlipCards,
     generateQuiz: generateQuiz,
+    generateListeningQuiz: generateListeningQuiz,
     generateDailyPractice: generateDailyPractice,
     generateKanaGame: generateKanaGame,
 

@@ -119,10 +119,14 @@ var Speech = (function () {
    * speak - 朗讀日語文字
    * @param {string} text - 要朗讀的日語文字
    * @param {number} [rate] - 語速（預設 0.8，較慢適合學習）
+   * @param {function} [onEnd] - 播放結束（或被取消/出錯）時呼叫，用於連續朗讀
    */
-  function speak(text, rate) {
+  function speak(text, rate, onEnd) {
     if (typeof speechSynthesis === 'undefined') return;
-    if (!text) return;
+    if (!text) {
+      if (onEnd) onEnd();
+      return;
+    }
 
     // 取消目前正在播放的語音，避免佇列堆積
     speechSynthesis.cancel();
@@ -136,11 +140,30 @@ var Speech = (function () {
       utterance.voice = _voice;
     }
 
+    if (onEnd) {
+      var called = false;
+      var fire = function () {
+        if (called) return;
+        called = true;
+        onEnd();
+      };
+      utterance.onend = fire;
+      utterance.onerror = fire; // 被 cancel 也會走 onerror，一樣要通知呼叫端
+    }
+
     // iOS Safari 修正：cancel 後需短暫延遲再播放
     // 否則可能靜音無聲
     setTimeout(function () {
       speechSynthesis.speak(utterance);
     }, 50);
+  }
+
+  /**
+   * stop - 停止目前的朗讀（離開對話畫面時用）
+   */
+  function stop() {
+    if (typeof speechSynthesis === 'undefined') return;
+    speechSynthesis.cancel();
   }
 
   /**
@@ -167,6 +190,7 @@ var Speech = (function () {
   return {
     init: init,
     speak: speak,
+    stop: stop,
     isReady: isReady,
     getStatus: getStatus
   };
