@@ -858,7 +858,7 @@ var App = (function () {
     // 支援兩種格式：ALL_WEEKS 陣列（累積式）或 WEEK_CONFIG 單週
     if (typeof ALL_WEEKS !== 'undefined' && ALL_WEEKS.length > 0) {
       allWeeks = ALL_WEEKS;
-      currentWeekIndex = allWeeks.length - 1; // 預設顯示最新週
+      currentWeekIndex = pickCurrentWeekIndex(allWeeks); // 預設顯示「今天進行中」的週
       weekConfig = allWeeks[currentWeekIndex];
       renderWeekSelector();
       renderHome();
@@ -874,6 +874,21 @@ var App = (function () {
 
   // ========== 週選擇器 ==========
 
+  // 選「今天所在」的那一週：最後一個開始日 <= 今天的週。
+  // 週次可以預先排到未來（自學單元），未開始的週不會被預設選中。
+  function pickCurrentWeekIndex(weeks) {
+    var now = new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var idx = 0;
+    for (var i = 0; i < weeks.length; i++) {
+      var p = (weeks[i].date || '').split('-');
+      if (p.length !== 3) continue;
+      var start = new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
+      if (start <= today) idx = i;
+    }
+    return idx;
+  }
+
   function renderWeekSelector() {
     if (allWeeks.length <= 1) return; // 只有一週不需要選擇器
 
@@ -886,7 +901,7 @@ var App = (function () {
       var w = allWeeks[i];
       var selected = i === currentWeekIndex ? ' selected' : '';
       html += '<option value="' + i + '"' + selected + '>';
-      html += '第 ' + w.week + ' 週';
+      html += '第 ' + w.week + ' 週' + (w.title ? ' — ' + w.title : '');
       html += '</option>';
     }
     dropdown.innerHTML = html;
